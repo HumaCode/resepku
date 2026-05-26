@@ -29,7 +29,9 @@
         <div class="input-wrap">
             <i class="bi bi-person icon-left"></i>
             <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Username kamu" autocomplete="username" required autofocus />
-            <x-input-error :messages="$errors->get('username')" class="mt-1 text-danger small text-start" />
+            <div class="error-feedback text-danger small text-start mt-1" id="error-username">
+                @error('username') {{ $message }} @enderror
+            </div>
         </div>
 
         <!-- Password -->
@@ -39,7 +41,9 @@
             <button type="button" class="toggle-pw" id="togglePw">
                 <i class="bi bi-eye" id="eyeIcon"></i>
             </button>
-            <x-input-error :messages="$errors->get('password')" class="mt-1 text-danger small text-start" />
+            <div class="error-feedback text-danger small text-start mt-1" id="error-password">
+                @error('password') {{ $message }} @enderror
+            </div>
         </div>
 
         <!-- Remember Me / Forgot Password -->

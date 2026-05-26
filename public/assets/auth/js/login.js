@@ -31,20 +31,68 @@ if (togglePw && pwInput && eyeIcon) {
   });
 }
 
-// ── Form submit (Laravel-compatible loading state) ──
-const loginForm = document.getElementById('loginForm');
-const loginBtn = document.getElementById('loginBtn');
-if (loginForm && loginBtn) {
-  loginForm.addEventListener('submit', function() {
-    if (loginForm.checkValidity()) {
-      loginBtn.classList.add('loading');
-      const btnText = loginBtn.querySelector('.btn-text');
-      if (btnText) {
-        btnText.textContent = 'Memproses...';
-      }
-    }
-  });
-}
+// ── Form submit (jQuery AJAX) ──
+$(document).ready(function() {
+  const $loginForm = $('#loginForm');
+  const $loginBtn = $('#loginBtn');
+
+  if ($loginForm.length && $loginBtn.length) {
+    $loginForm.on('submit', function(e) {
+      e.preventDefault();
+
+      // Clear previous error messages
+      $('.error-feedback').text('');
+
+      // Show spinner and disable button
+      $loginBtn.addClass('loading').prop('disabled', true);
+      const $btnText = $loginBtn.find('.btn-text');
+      const originalText = $btnText.text();
+      $btnText.text('Memproses...');
+
+      // Get form data and action url
+      const formData = $loginForm.serialize();
+      const actionUrl = $loginForm.attr('action');
+
+      $.ajax({
+        url: actionUrl,
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        },
+        success: function(response) {
+          if (response.success && response.redirect) {
+            window.location.href = response.redirect;
+          } else {
+            window.location.reload();
+          }
+        },
+        error: function(xhr) {
+          // Restore button state
+          $loginBtn.removeClass('loading').prop('disabled', false);
+          $btnText.text(originalText);
+
+          if (xhr.status === 422) {
+            // Validation errors
+            const errors = xhr.responseJSON.errors;
+            if (errors) {
+              Object.keys(errors).forEach(function(key) {
+                const errorMsg = errors[key][0];
+                $(`#error-${key}`).text(errorMsg);
+              });
+            }
+          } else {
+            // General error
+            const generalMsg = xhr.responseJSON?.message || 'Terjadi kesalahan sistem, silakan coba lagi.';
+            $('#error-username').text(generalMsg);
+          }
+        }
+      });
+    });
+  }
+});
 
 // ── Input focus styling helper ──
 document.querySelectorAll('.input-wrap input').forEach(input => {
