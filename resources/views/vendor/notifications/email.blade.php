@@ -35,15 +35,6 @@
 @foreach ($outroLines as $line)
 <p style="font-size: 15px; line-height: 1.6; color: #6e5d53; text-align: center; margin: 15px 0; font-family: 'Poppins', sans-serif;">{{ $line }}</p>
 @endforeach
-
-<p style="font-size: 15px; line-height: 1.6; color: #6e5d53; text-align: center; margin: 25px 0 10px 0; font-family: 'Poppins', sans-serif;">
-@if (! empty($salutation))
-{!! nl2br(e($salutation)) !!}
-@else
-@lang('Regards,')<br>
-<strong style="color: #2d1b0e;">{{ config('app.name') }}</strong>
-@endif
-</p>
 </div>
 
 @isset($actionText)
