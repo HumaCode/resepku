@@ -1,25 +1,47 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <!-- Logo & Title -->
+    <div class="text-center" data-aos="zoom-in" data-aos-delay="200">
+        <div class="logo-badge">
+            <i class="bi bi-fire"></i>
+        </div>
+        <h2 class="brand-title">Resep<span>Kita</span></h2>
+        <p class="brand-sub">Lupa Password Akun</p>
+    </div>
+
+    <!-- Description Text -->
+    <div class="brand-sub text-center my-3 px-2" style="font-size: 0.88rem; line-height: 1.5; color: var(--muted);" data-aos="fade-up" data-aos-delay="300">
+        Lupa password? Jangan khawatir. Masukkan alamat email Anda di bawah ini, dan kami akan mengirimkan tautan untuk mengatur ulang password baru Anda.
     </div>
 
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status class="mb-4 text-success small text-center" :status="session('status')" />
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <!-- Form -->
+    <form id="forgotPasswordForm" method="POST" action="{{ route('password.email') }}" class="mt-3" data-aos="fade-up" data-aos-delay="400" novalidate>
         @csrf
 
         <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <x-auth-input 
+            id="email" 
+            name="email" 
+            type="email" 
+            :value="old('email')" 
+            placeholder="Alamat Email Anda" 
+            icon="bi-envelope" 
+            autocomplete="email" 
+            required 
+            autofocus 
+        />
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        <!-- Submit Button -->
+        <div class="mt-4">
+            <x-auth-button id="forgotPasswordBtn" text="Kirim Link Reset Password" />
         </div>
     </form>
+
+    <!-- Back to Login Link -->
+    <div class="register-box" data-aos="fade-up" data-aos-delay="500">
+        Kembali ke halaman
+        <a href="{{ route('login') }}">Masuk Sekarang</a>
+    </div>
 </x-guest-layout>

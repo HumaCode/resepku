@@ -232,6 +232,102 @@ $(document).ready(function() {
       });
     });
   }
+
+  // ── Forgot Password Form submit (jQuery AJAX) ──
+  const $forgotForm = $('#forgotPasswordForm');
+  const $forgotBtn = $('#forgotPasswordBtn');
+
+  if ($forgotForm.length && $forgotBtn.length) {
+    $forgotForm.on('submit', function(e) {
+      e.preventDefault();
+
+      // Clear previous error messages
+      $('.error-feedback').text('');
+
+      // Show spinner and disable button
+      $forgotBtn.addClass('loading').prop('disabled', true);
+      const $btnText = $forgotBtn.find('.btn-text');
+      const originalText = $btnText.text();
+      $btnText.text('Mengirim...');
+
+      // Open fullscreen loader
+      const loader = PA.loading({
+        title: 'Memproses Permintaan...',
+        message: 'Sedang mengirimkan link reset password ke email Anda.',
+        dots: false
+      });
+
+      // Get form data and action url
+      const formData = $forgotForm.serialize();
+      const actionUrl = $forgotForm.attr('action');
+
+      $.ajax({
+        url: actionUrl,
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        },
+        success: function(response) {
+          loader.close();
+          $forgotBtn.removeClass('loading').prop('disabled', false);
+          $btnText.text(originalText);
+
+          PA.toast({
+            type: 'success',
+            title: 'Email Terkirim',
+            message: response.message || 'Tautan reset password telah dikirim ke email Anda!',
+            duration: 5000,
+            position: 'top-right'
+          });
+          
+          // Clear form field
+          $forgotForm.find('input[type="email"]').val('');
+        },
+        error: function(xhr) {
+          // Close loader
+          loader.close();
+
+          // Restore button state
+          $forgotBtn.removeClass('loading').prop('disabled', false);
+          $btnText.text(originalText);
+
+          if (xhr.status === 422) {
+            // Validation errors
+            const errors = xhr.responseJSON.errors;
+            if (errors) {
+              Object.keys(errors).forEach(function(key) {
+                const errorMsg = errors[key][0];
+                $(`#error-${key}`).text(errorMsg);
+              });
+            }
+
+            PA.toast({
+              type: 'warning',
+              title: 'Permintaan Gagal',
+              message: 'Periksa kembali email yang Anda masukkan.',
+              duration: 4000,
+              position: 'top-right'
+            });
+          } else {
+            // General error
+            const generalMsg = xhr.responseJSON?.message || 'Terjadi kesalahan sistem, silakan coba lagi.';
+            $(`#error-email`).text(generalMsg);
+
+            PA.toast({
+              type: 'danger',
+              title: 'Kesalahan Sistem',
+              message: generalMsg,
+              duration: 5000,
+              position: 'top-right'
+            });
+          }
+        }
+      });
+    });
+  }
 });
 
 // ── Input focus styling helper ──
