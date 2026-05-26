@@ -26,6 +26,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->primary(['menu_id', 'permission_id']);
+            $table->index('permission_id');
         });
     }
 

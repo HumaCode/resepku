@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('name');
+            $table->string('name')->index();
             $table->string('url')->nullable()->index();
             $table->string('category')->index();
             $table->string('icon')->nullable();

@@ -117,6 +117,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->primary([$pivotPermission, $pivotRole], 'role_has_permissions_permission_id_role_id_primary');
+            $table->index($pivotRole, 'role_has_permissions_role_id_index');
         });
 
         app('cache')
