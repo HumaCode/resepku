@@ -2,21 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Spatie\Permission\Models\Permission as SpatiePermission;
 
+#[Fillable(['name', 'guard_name', 'is_active'])]
 class Permission extends SpatiePermission
 {
     use HasUlids;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'guard_name',
-        'is_active',
-    ];
 }
