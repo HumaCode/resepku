@@ -20,16 +20,17 @@ if (container) {
 }
 
 // ── Toggle password ──
-const togglePw = document.getElementById('togglePw');
-const pwInput  = document.getElementById('password');
-const eyeIcon  = document.getElementById('eyeIcon');
-if (togglePw && pwInput && eyeIcon) {
-  togglePw.addEventListener('click', () => {
-    const show = pwInput.type === 'password';
-    pwInput.type = show ? 'text' : 'password';
-    eyeIcon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+$(document).ready(function() {
+  $(document).on('click', '.toggle-pw', function() {
+    const $btn = $(this);
+    const $input = $btn.siblings('input');
+    const $icon = $btn.find('i');
+    
+    const show = $input.attr('type') === 'password';
+    $input.attr('type', show ? 'text' : 'password');
+    $icon.toggleClass('bi-eye-slash bi-eye');
   });
-}
+});
 
 // ── Form submit (jQuery AJAX) ──
 $(document).ready(function() {

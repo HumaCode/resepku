@@ -30,8 +30,8 @@
         />
         
         @if($togglePassword)
-            <button type="button" class="toggle-pw" id="togglePw">
-                <i class="bi bi-eye" id="eyeIcon"></i>
+            <button type="button" class="toggle-pw">
+                <i class="bi bi-eye"></i>
             </button>
         @endif
     </div>
