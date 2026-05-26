@@ -25,11 +25,11 @@
     <form id="loginForm" method="POST" action="{{ route('login') }}" data-aos="fade-up" data-aos-delay="400" novalidate>
         @csrf
 
-        <!-- Email Address -->
+        <!-- Username -->
         <div class="input-wrap">
-            <i class="bi bi-envelope icon-left"></i>
-            <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="Email kamu" autocomplete="email" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-1 text-danger small text-start" />
+            <i class="bi bi-person icon-left"></i>
+            <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Username kamu" autocomplete="username" required autofocus />
+            <x-input-error :messages="$errors->get('username')" class="mt-1 text-danger small text-start" />
         </div>
 
         <!-- Password -->
