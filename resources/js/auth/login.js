@@ -328,6 +328,106 @@ $(document).ready(function() {
       });
     });
   }
+
+  // ── Reset Password Form submit (jQuery AJAX) ──
+  const $resetForm = $('#resetPasswordForm');
+  const $resetBtn = $('#resetPasswordBtn');
+
+  if ($resetForm.length && $resetBtn.length) {
+    $resetForm.on('submit', function(e) {
+      e.preventDefault();
+
+      // Clear previous error messages
+      $('.error-feedback').text('');
+
+      // Show spinner and disable button
+      $resetBtn.addClass('loading').prop('disabled', true);
+      const $btnText = $resetBtn.find('.btn-text');
+      const originalText = $btnText.text();
+      $btnText.text('Menyimpan...');
+
+      // Open fullscreen loader
+      const loader = PA.loading({
+        title: 'Memproses Reset...',
+        message: 'Sedang mengatur ulang password baru Anda.',
+        dots: false
+      });
+
+      // Get form data and action url
+      const formData = $resetForm.serialize();
+      const actionUrl = $resetForm.attr('action');
+
+      $.ajax({
+        url: actionUrl,
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        },
+        success: function(response) {
+          loader.update('Password berhasil diubah! Mengalihkan...');
+
+          PA.toast({
+            type: 'success',
+            title: 'Reset Berhasil',
+            message: response.message || 'Password Anda telah berhasil diatur ulang.',
+            duration: 3000,
+            position: 'top-right'
+          });
+
+          setTimeout(() => {
+            loader.close();
+            if (response.success && response.redirect) {
+              window.location.href = response.redirect;
+            } else {
+              window.location.reload();
+            }
+          }, 1500);
+        },
+        error: function(xhr) {
+          // Close loader
+          loader.close();
+
+          // Restore button state
+          $resetBtn.removeClass('loading').prop('disabled', false);
+          $btnText.text(originalText);
+
+          if (xhr.status === 422) {
+            // Validation errors
+            const errors = xhr.responseJSON.errors;
+            if (errors) {
+              Object.keys(errors).forEach(function(key) {
+                const errorMsg = errors[key][0];
+                $(`#error-${key}`).text(errorMsg);
+              });
+            }
+
+            PA.toast({
+              type: 'warning',
+              title: 'Reset Gagal',
+              message: 'Periksa kembali data password yang dimasukkan.',
+              duration: 4000,
+              position: 'top-right'
+            });
+          } else {
+            // General error
+            const generalMsg = xhr.responseJSON?.message || 'Terjadi kesalahan sistem, silakan coba lagi.';
+            $(`#error-password`).text(generalMsg);
+
+            PA.toast({
+              type: 'danger',
+              title: 'Kesalahan Sistem',
+              message: generalMsg,
+              duration: 5000,
+              position: 'top-right'
+            });
+          }
+        }
+      });
+    });
+  }
 });
 
 // ── Input focus styling helper ──
