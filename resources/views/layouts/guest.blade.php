@@ -5,26 +5,90 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Resepku') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <!-- Bootstrap 5 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <!-- AOS -->
+        <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!-- Custom Auth Styles -->
+        <link href="{{ asset('assets/auth/css/login.css') }}" rel="stylesheet"/>
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    <body>
+        <!-- Background Scene -->
+        <div class="bg-scene">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+            <div class="bg-grid"></div>
+        </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+        <!-- Floating food icons -->
+        <div id="floatIcons"></div>
+
+        <!-- Main Wrapper -->
+        <div class="page-wrapper">
+            <div class="container-fluid px-0">
+                <div class="row g-0 main-row">
+                    <!-- LEFT: Hero Panel (hidden on mobile) -->
+                    <div class="col-lg-7 d-none d-lg-flex hero-panel" data-aos="fade-right" data-aos-duration="900">
+                        <div>
+                            <div class="hero-tag">
+                                <i class="bi bi-stars"></i> Platform Resep #1
+                            </div>
+                            <h1 class="hero-heading">
+                                Temukan &<br><span>Bagikan</span> Resep<br>Terbaikmu
+                            </h1>
+                            <p class="hero-desc">
+                                Bergabung bersama ribuan chef rumahan dan food lover. Simpan, eksplor, dan ciptakan resep-resep menakjubkan setiap hari.
+                            </p>
+
+                            <div class="stat-cards" data-aos="fade-up" data-aos-delay="300">
+                                <div class="stat-card">
+                                    <div class="stat-num">12K+</div>
+                                    <div class="stat-lbl">Resep Tersedia</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-num">8K+</div>
+                                    <div class="stat-lbl">Chef Aktif</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-num">4.9★</div>
+                                    <div class="stat-lbl">Rating Rata-rata</div>
+                                </div>
+                            </div>
+
+                            <div class="emoji-strip" data-aos="fade-up" data-aos-delay="450">
+                                <div class="emoji-pill">🍜 Mie</div>
+                                <div class="emoji-pill">🍱 Bento</div>
+                                <div class="emoji-pill">🥗 Salad</div>
+                                <div class="emoji-pill">🍰 Dessert</div>
+                                <div class="emoji-pill">🥤 Minuman</div>
+                                <div class="emoji-pill">🍛 Nasi</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Card Login -->
+                    <div class="col-lg-5 card-col d-flex align-items-center justify-content-center" style="padding: 2rem 1.5rem; min-height:100vh;">
+                        <div class="card-login" data-aos="fade-left" data-aos-duration="900">
+                            {{ $slot }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- AOS JS -->
+        <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+        <!-- Custom Auth Scripts -->
+        <script src="{{ asset('assets/auth/js/login.js') }}"></script>
     </body>
 </html>
