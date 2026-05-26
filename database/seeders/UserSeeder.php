@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
                 [
                     'name' => ucfirst($roleName) . ' User',
                     'username' => $roleName,
-                    'password' => Hash::make('password'),
+                    'password' => Hash::make('123'),
                     'email_verified_at' => now(),
                     'is_active' => '1',
                 ]

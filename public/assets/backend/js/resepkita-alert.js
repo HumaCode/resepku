@@ -295,7 +295,7 @@
       <div class="pa-loading-msg" id="pa-load-msg">${esc(opts.message)}</div>
       <div class="pa-loading-brand">
         <div class="pa-loading-brand-dot"></div>
-        <div class="pa-loading-brand-text">PPID Kota Pekalongan</div>
+        <div class="pa-loading-brand-text">ResepKita</div>
         <div class="pa-loading-brand-dot"></div>
       </div>`;
 
