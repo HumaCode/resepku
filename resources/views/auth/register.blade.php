@@ -9,7 +9,7 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('register') }}" class="mt-4" data-aos="fade-up" data-aos-delay="400" novalidate>
+    <form id="registerForm" method="POST" action="{{ route('register') }}" class="mt-4" data-aos="fade-up" data-aos-delay="400" novalidate>
         @csrf
 
         <!-- Name -->

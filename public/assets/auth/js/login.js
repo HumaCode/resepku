@@ -132,6 +132,106 @@ $(document).ready(function() {
       });
     });
   }
+
+  // ── Registration Form submit (jQuery AJAX) ──
+  const $registerForm = $('#registerForm');
+  const $registerBtn = $('#registerBtn');
+
+  if ($registerForm.length && $registerBtn.length) {
+    $registerForm.on('submit', function(e) {
+      e.preventDefault();
+
+      // Clear previous error messages
+      $('.error-feedback').text('');
+
+      // Show spinner and disable button
+      $registerBtn.addClass('loading').prop('disabled', true);
+      const $btnText = $registerBtn.find('.btn-text');
+      const originalText = $btnText.text();
+      $btnText.text('Mendaftar...');
+
+      // Open fullscreen loader
+      const loader = PA.loading({
+        title: 'Memproses Pendaftaran...',
+        message: 'Sedang membuat akun baru Anda.',
+        dots: false
+      });
+
+      // Get form data and action url
+      const formData = $registerForm.serialize();
+      const actionUrl = $registerForm.attr('action');
+
+      $.ajax({
+        url: actionUrl,
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        },
+        success: function(response) {
+          loader.update('Pendaftaran berhasil! Mengalihkan...');
+
+          PA.toast({
+            type: 'success',
+            title: 'Pendaftaran Berhasil',
+            message: 'Selamat bergabung di ResepKita!',
+            duration: 3000,
+            position: 'top-right'
+          });
+
+          setTimeout(() => {
+            loader.close();
+            if (response.success && response.redirect) {
+              window.location.href = response.redirect;
+            } else {
+              window.location.reload();
+            }
+          }, 1000);
+        },
+        error: function(xhr) {
+          // Close loader
+          loader.close();
+
+          // Restore button state
+          $registerBtn.removeClass('loading').prop('disabled', false);
+          $btnText.text(originalText);
+
+          if (xhr.status === 422) {
+            // Validation errors
+            const errors = xhr.responseJSON.errors;
+            if (errors) {
+              Object.keys(errors).forEach(function(key) {
+                const errorMsg = errors[key][0];
+                $(`#error-${key}`).text(errorMsg);
+              });
+            }
+
+            PA.toast({
+              type: 'warning',
+              title: 'Pendaftaran Gagal',
+              message: 'Periksa kembali data pendaftaran Anda.',
+              duration: 4000,
+              position: 'top-right'
+            });
+          } else {
+            // General error
+            const generalMsg = xhr.responseJSON?.message || 'Terjadi kesalahan sistem, silakan coba lagi.';
+            $(`#error-name`).text(generalMsg);
+
+            PA.toast({
+              type: 'danger',
+              title: 'Kesalahan Sistem',
+              message: generalMsg,
+              duration: 5000,
+              position: 'top-right'
+            });
+          }
+        }
+      });
+    });
+  }
 });
 
 // ── Input focus styling helper ──
