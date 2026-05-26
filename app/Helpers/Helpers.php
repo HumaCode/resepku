@@ -82,3 +82,17 @@ if (!function_exists('urlMenu')) {
         });
     }
 }
+
+if (!function_exists('user')) {
+    function user($method = null, ...$args)
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return null;
+        }
+        if ($method) {
+            return $user->{$method}(...$args);
+        }
+        return $user;
+    }
+}
