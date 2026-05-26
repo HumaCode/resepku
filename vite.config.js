@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/backend/resepkita-alert.js',
                 'resources/css/dashboard.css',
                 'resources/js/dashboard.js',
+                'resources/css/global.css',
             ],
             refresh: true,
         }),
