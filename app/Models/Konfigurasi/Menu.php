@@ -18,4 +18,16 @@ class Menu extends Model
     {
         return $query->where('is_active', '1');
     }
+
+    /**
+     * Scope a query to search menus by name, url, or category.
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('url', 'like', "%{$search}%")
+                ->orWhere('category', 'like', "%{$search}%");
+        });
+    }
 }

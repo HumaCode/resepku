@@ -34,4 +34,17 @@ class User extends Authenticatable implements HasMedia
             'last_activity' => 'datetime',
         ];
     }
+
+    /**
+     * Scope a query to search users by name, username, email, or phone.
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('username', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('telp', 'like', "%{$search}%");
+        });
+    }
 }

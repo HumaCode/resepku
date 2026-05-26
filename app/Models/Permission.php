@@ -18,4 +18,15 @@ class Permission extends SpatiePermission
     {
         return $this->belongsToMany(Konfigurasi\Menu::class, 'menu_has_permissions', 'permission_id', 'menu_id');
     }
+
+    /**
+     * Scope a query to search permissions by name or guard name.
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('guard_name', 'like', "%{$search}%");
+        });
+    }
 }
