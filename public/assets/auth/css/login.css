@@ -160,7 +160,6 @@ html, body {
 /* Input group */
 .input-wrap {
   position: relative;
-  margin-bottom: 1rem;
 }
 .input-wrap .icon-left {
   position: absolute;

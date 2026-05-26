@@ -26,22 +26,26 @@
         @csrf
 
         <!-- Username -->
-        <div class="input-wrap">
-            <i class="bi bi-person icon-left"></i>
-            <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Username kamu" autocomplete="username" required autofocus />
-            <div class="error-feedback text-danger small text-start mt-1" id="error-username">
+        <div class="mb-3 text-start">
+            <div class="input-wrap">
+                <i class="bi bi-person icon-left"></i>
+                <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Username kamu" autocomplete="username" required autofocus />
+            </div>
+            <div class="error-feedback text-danger small mt-1" id="error-username">
                 @error('username') {{ $message }} @enderror
             </div>
         </div>
 
         <!-- Password -->
-        <div class="input-wrap">
-            <i class="bi bi-lock icon-left"></i>
-            <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password" required />
-            <button type="button" class="toggle-pw" id="togglePw">
-                <i class="bi bi-eye" id="eyeIcon"></i>
-            </button>
-            <div class="error-feedback text-danger small text-start mt-1" id="error-password">
+        <div class="mb-3 text-start">
+            <div class="input-wrap">
+                <i class="bi bi-lock icon-left"></i>
+                <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password" required />
+                <button type="button" class="toggle-pw" id="togglePw">
+                    <i class="bi bi-eye" id="eyeIcon"></i>
+                </button>
+            </div>
+            <div class="error-feedback text-danger small mt-1" id="error-password">
                 @error('password') {{ $message }} @enderror
             </div>
         </div>

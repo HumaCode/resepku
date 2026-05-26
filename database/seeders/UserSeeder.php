@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 ['email' => "{$roleName}@resepku.com"],
                 [
                     'name' => ucfirst($roleName) . ' User',
-                    'username' => $roleName . 'user',
+                    'username' => $roleName,
                     'password' => Hash::make('password'),
                     'email_verified_at' => now(),
                     'is_active' => '1',
