@@ -16,6 +16,8 @@
         <!-- Bootstrap Icons -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
+        <!-- ResepKita Alert Styles -->
+        <link href="{{ asset('assets/backend/css/resepkita-alert.css') }}" rel="stylesheet"/>
         <!-- Custom Auth Styles -->
         <link href="{{ asset('assets/auth/css/login.css') }}" rel="stylesheet"/>
     </head>
@@ -90,6 +92,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- AOS JS -->
         <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+        <!-- ResepKita Alert JS -->
+        <script src="{{ asset('assets/backend/js/resepkita-alert.js') }}"></script>
         <!-- Custom Auth Scripts -->
         <script src="{{ asset('assets/auth/js/login.js') }}"></script>
     </body>

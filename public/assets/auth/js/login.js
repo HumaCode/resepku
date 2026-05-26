@@ -49,6 +49,13 @@ $(document).ready(function() {
       const originalText = $btnText.text();
       $btnText.text('Memproses...');
 
+      // Open fullscreen loader
+      const loader = PA.loading({
+        title: 'Memproses Masuk...',
+        message: 'Sedang memvalidasi akun Anda.',
+        dots: false
+      });
+
       // Get form data and action url
       const formData = $loginForm.serialize();
       const actionUrl = $loginForm.attr('action');
@@ -63,13 +70,29 @@ $(document).ready(function() {
           'Accept': 'application/json'
         },
         success: function(response) {
-          if (response.success && response.redirect) {
-            window.location.href = response.redirect;
-          } else {
-            window.location.reload();
-          }
+          loader.update('Autentikasi berhasil! Mengalihkan...');
+
+          PA.toast({
+            type: 'success',
+            title: 'Masuk Berhasil',
+            message: 'Selamat datang kembali di ResepKita!',
+            duration: 3000,
+            position: 'top-right'
+          });
+
+          setTimeout(() => {
+            loader.close();
+            if (response.success && response.redirect) {
+              window.location.href = response.redirect;
+            } else {
+              window.location.reload();
+            }
+          }, 1000);
         },
         error: function(xhr) {
+          // Close loader
+          loader.close();
+
           // Restore button state
           $loginBtn.removeClass('loading').prop('disabled', false);
           $btnText.text(originalText);
@@ -83,10 +106,26 @@ $(document).ready(function() {
                 $(`#error-${key}`).text(errorMsg);
               });
             }
+
+            PA.toast({
+              type: 'warning',
+              title: 'Gagal Masuk',
+              message: 'Periksa kembali data yang dimasukkan.',
+              duration: 4000,
+              position: 'top-right'
+            });
           } else {
             // General error
             const generalMsg = xhr.responseJSON?.message || 'Terjadi kesalahan sistem, silakan coba lagi.';
-            $('#error-username').text(generalMsg);
+            $(`#error-username`).text(generalMsg);
+
+            PA.toast({
+              type: 'danger',
+              title: 'Kesalahan Sistem',
+              message: generalMsg,
+              duration: 5000,
+              position: 'top-right'
+            });
           }
         }
       });
