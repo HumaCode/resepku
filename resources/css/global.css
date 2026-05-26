@@ -443,30 +443,30 @@ body {
   to   { transform: scale(1);  opacity: 1; }
 }
 .logout-icon-wrap {
-  width: 90px; height: 90px; border-radius: 28px;
+  width: 100px; height: 100px; border-radius: 32px;
   background: linear-gradient(135deg, #fee2e2, #fecaca);
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 1.5rem;
   box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
   animation: logoutPulse 2.5s infinite ease-in-out;
 }
-.logout-icon-wrap i { font-size: 2.5rem; color: var(--danger); }
+.logout-icon-wrap i { font-size: 2.8rem; color: var(--danger); }
 @keyframes logoutPulse {
   0%, 100% { transform: scale(1) rotate(0deg); }
   50% { transform: scale(1.08) rotate(5deg); }
 }
 .btn-logout-confirm {
   background: linear-gradient(135deg, #f87171, #ef4444);
-  border: none; color: #fff; border-radius: 14px; padding: .8rem 1.8rem;
-  font-family: 'Poppins',sans-serif; font-weight: 600; font-size: .9rem;
+  border: none; color: #fff; border-radius: 14px; padding: .9rem 2.2rem;
+  font-family: 'Poppins',sans-serif; font-weight: 600; font-size: .95rem;
   cursor: pointer; transition: all var(--transition);
   box-shadow: 0 4px 16px rgba(239,68,68,.3);
 }
 .btn-logout-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(239,68,68,.45); }
 .btn-logout-cancel {
   border: 1.5px solid var(--border); background: var(--surface);
-  border-radius: 14px; padding: .8rem 1.8rem;
-  font-family: 'Poppins',sans-serif; font-weight: 600; font-size: .9rem;
+  border-radius: 14px; padding: .9rem 2.2rem;
+  font-family: 'Poppins',sans-serif; font-weight: 600; font-size: .95rem;
   color: var(--muted); cursor: pointer; transition: all var(--transition);
 }
 .btn-logout-cancel:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-pale); }
