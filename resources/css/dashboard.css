@@ -16,8 +16,8 @@
 }
 .bc-left { display: flex; flex-direction: column; gap: .2rem; }
 .bc-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem; font-weight: 900;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3rem; font-weight: 800;
   color: var(--secondary);
   display: flex; align-items: center; gap: .5rem;
 }
@@ -89,8 +89,8 @@
 .stat-card.c-yellow .stat-icon { background: linear-gradient(135deg,#fef9c3,#fef08a); color: #d97706; }
 
 .stat-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 2rem; font-weight: 900; color: var(--secondary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.8rem; font-weight: 800; color: var(--secondary);
   line-height: 1;
 }
 .stat-label { font-size: .78rem; color: var(--muted); margin-top: .25rem; }
@@ -116,8 +116,8 @@
   flex-wrap: nowrap;
 }
 .section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem; font-weight: 900; color: var(--secondary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem; font-weight: 800; color: var(--secondary);
   display: flex; align-items: center; gap: .5rem;
   flex-shrink: 0;
 }
@@ -267,8 +267,8 @@
 @keyframes iconBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
 .qb-item { display: flex; flex-direction: column; align-items: center; }
 .qb-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem; font-weight: 900; color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem; font-weight: 800; color: #fff;
 }
 .qb-label { font-size: .7rem; color: rgba(255,255,255,.5); margin-top: .1rem; }
 .qb-divider { width: 1px; height: 40px; background: rgba(255,255,255,.1); }
@@ -295,7 +295,7 @@
   background: rgba(255,255,255,.05);
 }
 .wb-emoji { font-size: 2rem; animation: iconBob 2s ease-in-out infinite; display: inline-block; }
-.wb-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; }
+.wb-title { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 800; }
 .wb-sub   { font-size: .83rem; opacity: .8; margin-top: .2rem; }
 .wb-btn {
   display: inline-flex; align-items: center; gap: .4rem;

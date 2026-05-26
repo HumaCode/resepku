@@ -135,9 +135,9 @@ html, body {
 }
 
 .brand-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1.85rem;
-  font-weight: 900;
+  font-weight: 800;
   color: var(--secondary);
   letter-spacing: -.5px;
 }
@@ -321,9 +321,9 @@ html, body {
   50%      { transform: rotate(15deg); }
 }
 .hero-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: clamp(2rem, 4vw, 3.2rem);
-  font-weight: 900;
+  font-weight: 800;
   color: var(--secondary);
   line-height: 1.15;
 }
@@ -371,9 +371,9 @@ html, body {
   box-shadow: 0 8px 24px rgba(232,93,38,.15);
 }
 .stat-num {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1.6rem;
-  font-weight: 900;
+  font-weight: 800;
   color: var(--primary);
 }
 .stat-lbl { font-size: .75rem; color: var(--muted); margin-top: .1rem; }
