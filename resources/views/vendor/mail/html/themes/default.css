@@ -3,8 +3,7 @@
 body,
 body *:not(html):not(style):not(br):not(tr):not(code) {
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     position: relative;
 }
 
@@ -23,12 +22,13 @@ p,
 ul,
 ol,
 blockquote {
-    line-height: 1.4;
-    text-align: start;
+    line-height: 1.6;
+    text-align: center;
 }
 
 a {
-    color: #18181b;
+    color: #e85d26;
+    text-decoration: none;
 }
 
 a img {
@@ -38,18 +38,18 @@ a img {
 /* Typography */
 
 h1 {
-    color: #18181b;
-    font-size: 18px;
+    color: #2d1b0e;
+    font-size: 22px;
     font-weight: bold;
     margin-top: 0;
-    text-align: start;
+    text-align: center;
 }
 
 h2 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     margin-top: 0;
-    text-align: start;
+    text-align: center;
 }
 
 h3 {
@@ -60,10 +60,11 @@ h3 {
 }
 
 p {
-    font-size: 16px;
-    line-height: 1.5em;
+    font-size: 15px;
+    line-height: 1.6em;
     margin-top: 0;
-    text-align: left;
+    text-align: center;
+    color: #6e5d53;
 }
 
 p.sub {
@@ -230,7 +231,7 @@ img {
 
 .button {
     -webkit-text-size-adjust: none;
-    border-radius: 4px;
+    border-radius: 12px;
     color: #fff;
     display: inline-block;
     overflow: hidden;
@@ -239,11 +240,11 @@ img {
 
 .button-blue,
 .button-primary {
-    background-color: #18181b;
-    border-bottom: 8px solid #18181b;
-    border-left: 18px solid #18181b;
-    border-right: 18px solid #18181b;
-    border-top: 8px solid #18181b;
+    background-color: #e85d26;
+    border-bottom: 12px solid #e85d26;
+    border-left: 24px solid #e85d26;
+    border-right: 24px solid #e85d26;
+    border-top: 12px solid #e85d26;
 }
 
 .button-green,
@@ -267,7 +268,7 @@ img {
 /* Panels */
 
 .panel {
-    border-left: #18181b solid 4px;
+    border-left: #e85d26 solid 4px;
     margin: 21px 0;
 }
 
