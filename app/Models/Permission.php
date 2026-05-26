@@ -10,4 +10,12 @@ use Spatie\Permission\Models\Permission as SpatiePermission;
 class Permission extends SpatiePermission
 {
     use HasUlids;
+
+    /**
+     * Get the menus associated with the permission.
+     */
+    public function menus()
+    {
+        return $this->belongsToMany(Konfigurasi\Menu::class, 'menu_has_permissions', 'permission_id', 'menu_id');
+    }
 }
