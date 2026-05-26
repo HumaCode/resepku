@@ -7,9 +7,11 @@ use Illuminate\Database\Seeder;
 
 use App\Models\Konfigurasi\Menu;
 use Illuminate\Support\Facades\Cache;
+use App\Traits\HasMenuPermission;
 
 class MenuSeeder extends Seeder
 {
+    use HasMenuPermission;
     /**
      * Run the database seeds.
      */
@@ -182,10 +184,21 @@ class MenuSeeder extends Seeder
         ];
 
         foreach ($menus as $menuData) {
-            Menu::updateOrCreate(
+            $menu = Menu::updateOrCreate(
                 ['url' => $menuData['url']],
                 $menuData
             );
+
+            // Tentukan custom permission sesuai request
+            $customPermissions = null;
+            if ($menu->url === 'roles-permissions-management') {
+                $customPermissions = ['menu', 'create', 'read', 'show', 'update', 'delete', 'akses'];
+            } elseif ($menu->url === 'users') {
+                $customPermissions = ['menu', 'create', 'read', 'show', 'update', 'delete', 'activate'];
+            }
+
+            // Assign permissions ke menu dan ke role dev
+            $this->attachMenupermission($menu, $customPermissions, ['dev']);
         }
 
         // Clear menu cache to make sure updates are visible immediately
