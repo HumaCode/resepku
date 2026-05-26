@@ -56,12 +56,29 @@ if (!function_exists('tgl_indo')) {
 if (!function_exists('menus')) {
     function menus($grouped = true)
     {
-        // 1. Ambil data asli (flat) dari cache agar query hanya 1x
-        $allMenus = Cache::rememberForever('menus_data', function () {
+        // 1. Ambil data asli (flat) dari cache sebagai array mentah agar query hanya 1x
+        $menuArray = Cache::rememberForever('menus_data_array', function () {
             return Menu::active()
                 ->orderBy('orders')
-                ->get();
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'name' => $item->name,
+                        'url' => $item->url,
+                        'category' => $item->category,
+                        'icon' => $item->icon,
+                        'badge_count' => $item->badge_count ?? 0,
+                        'count' => $item->count ?? 0,
+                    ];
+                })
+                ->toArray();
         });
+
+        // Konversi kembali ke collection dari stdClass object agar properti $menu->name dll. tetap kompatibel
+        $allMenus = collect(array_map(function ($item) {
+            return (object) $item;
+        }, $menuArray));
 
         // 2. Jika minta grouped (untuk Sidebar), lakukan grouping di memori PHP
         if ($grouped) {
