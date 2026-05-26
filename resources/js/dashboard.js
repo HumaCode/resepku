@@ -74,8 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
   window.doLogout = function() {
     const btn = document.querySelector('.btn-logout-confirm');
     if (btn) {
-      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Keluar...';
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sedang proses...';
       btn.disabled = true;
+    }
+    const cancelBtn = document.querySelector('.btn-logout-cancel');
+    if (cancelBtn) {
+      cancelBtn.disabled = true;
     }
     const form = document.getElementById('logout-form');
     if (form) {

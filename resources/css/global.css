@@ -443,28 +443,33 @@ body {
   to   { transform: scale(1);  opacity: 1; }
 }
 .logout-icon-wrap {
-  width: 80px; height: 80px; border-radius: 24px;
+  width: 90px; height: 90px; border-radius: 28px;
   background: linear-gradient(135deg, #fee2e2, #fecaca);
   display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 1rem;
-  animation: iconBob 2s ease-in-out infinite;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
+  animation: logoutPulse 2.5s infinite ease-in-out;
 }
-.logout-icon-wrap i { font-size: 2.2rem; color: var(--danger); }
+.logout-icon-wrap i { font-size: 2.5rem; color: var(--danger); }
+@keyframes logoutPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.08) rotate(5deg); }
+}
 .btn-logout-confirm {
   background: linear-gradient(135deg, #f87171, #ef4444);
-  border: none; color: #fff; border-radius: 12px; padding: .7rem 2rem;
+  border: none; color: #fff; border-radius: 14px; padding: .8rem 1.8rem;
   font-family: 'Poppins',sans-serif; font-weight: 600; font-size: .9rem;
-  cursor: pointer; transition: transform .2s, box-shadow .2s;
+  cursor: pointer; transition: all var(--transition);
   box-shadow: 0 4px 16px rgba(239,68,68,.3);
 }
-.btn-logout-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(239,68,68,.4); }
+.btn-logout-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(239,68,68,.45); }
 .btn-logout-cancel {
-  border: 1.5px solid var(--border); background: transparent;
-  border-radius: 12px; padding: .68rem 2rem;
+  border: 1.5px solid var(--border); background: var(--surface);
+  border-radius: 14px; padding: .8rem 1.8rem;
   font-family: 'Poppins',sans-serif; font-weight: 600; font-size: .9rem;
-  color: var(--muted); cursor: pointer; transition: border-color .2s, color .2s;
+  color: var(--muted); cursor: pointer; transition: all var(--transition);
 }
-.btn-logout-cancel:hover { border-color: var(--primary); color: var(--primary); }
+.btn-logout-cancel:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-pale); }
 
 /* ── Mobile overlay ── */
 .sidebar-overlay {
