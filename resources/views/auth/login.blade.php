@@ -26,29 +26,28 @@
         @csrf
 
         <!-- Username -->
-        <div class="mb-3 text-start">
-            <div class="input-wrap">
-                <i class="bi bi-person icon-left"></i>
-                <input type="text" id="username" name="username" value="{{ old('username') }}" placeholder="Username kamu" autocomplete="username" required autofocus />
-            </div>
-            <div class="error-feedback text-danger small mt-1" id="error-username">
-                @error('username') {{ $message }} @enderror
-            </div>
-        </div>
+        <x-auth-input 
+            id="username" 
+            name="username" 
+            :value="old('username')" 
+            placeholder="Username kamu" 
+            icon="bi-person" 
+            autocomplete="username" 
+            required 
+            autofocus 
+        />
 
         <!-- Password -->
-        <div class="mb-3 text-start">
-            <div class="input-wrap">
-                <i class="bi bi-lock icon-left"></i>
-                <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password" required />
-                <button type="button" class="toggle-pw" id="togglePw">
-                    <i class="bi bi-eye" id="eyeIcon"></i>
-                </button>
-            </div>
-            <div class="error-feedback text-danger small mt-1" id="error-password">
-                @error('password') {{ $message }} @enderror
-            </div>
-        </div>
+        <x-auth-input 
+            id="password" 
+            name="password" 
+            type="password" 
+            placeholder="Password" 
+            icon="bi-lock" 
+            autocomplete="current-password" 
+            required 
+            togglePassword="true" 
+        />
 
         <!-- Remember Me / Forgot Password -->
         <div class="d-flex align-items-center justify-content-between mb-3" data-aos="fade-up" data-aos-delay="450">
@@ -62,10 +61,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn-login" id="loginBtn">
-            <div class="spinner" id="spinner"></div>
-            <span class="btn-text">Masuk Sekarang</span>
-        </button>
+        <x-auth-button id="loginBtn" text="Masuk Sekarang" />
     </form>
 
     <!-- Register Link -->
