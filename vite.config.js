@@ -11,6 +11,8 @@ export default defineConfig({
                 'resources/js/auth/login.js',
                 'resources/css/backend/resepkita-alert.css',
                 'resources/js/backend/resepkita-alert.js',
+                'resources/css/dashboard.css',
+                'resources/js/dashboard.js',
             ],
             refresh: true,
         }),
