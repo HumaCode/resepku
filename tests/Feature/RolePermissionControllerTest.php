@@ -317,5 +317,47 @@ test('authenticated user can sync permissions with valid matrix payload', functi
     expect($userRole->fresh()->hasPermissionTo('resep.create'))->toBeFalse();
 });
 
+test('authenticated user can toggle active status of a custom role', function () {
+    $user = User::factory()->create();
+    $role = Role::create([
+        'name' => 'Editor Baru',
+        'slug' => 'editor-baru',
+        'guard_name' => 'web',
+        'is_active' => '1',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->patchJson(route('roles-permissions.toggle-active', $role))
+        ->assertStatus(200);
+
+    expect($response['success'])->toBeTrue();
+    expect($response['data']['is_active'])->toBe('0');
+    expect($role->fresh()->is_active)->toBe('0');
+
+    $response = $this->actingAs($user)
+        ->patchJson(route('roles-permissions.toggle-active', $role))
+        ->assertStatus(200);
+
+    expect($response['data']['is_active'])->toBe('1');
+    expect($role->fresh()->is_active)->toBe('1');
+});
+
+test('authenticated user cannot toggle active status of a system role', function () {
+    $user = User::factory()->create();
+    $role = Role::create([
+        'name' => 'admin',
+        'slug' => 'admin',
+        'guard_name' => 'web',
+        'is_active' => '1',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->patchJson(route('roles-permissions.toggle-active', $role))
+        ->assertStatus(422);
+
+    expect($response['success'])->toBeFalse();
+    expect($role->fresh()->is_active)->toBe('1');
+});
+
 
 

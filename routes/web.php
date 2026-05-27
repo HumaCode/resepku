@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/roles-permissions-management/roles', [RolePermissionController::class, 'getRoles'])->name('roles-permissions.roles');
     Route::post('/roles-permissions-management/roles', [RolePermissionController::class, 'store'])->name('roles-permissions.store');
     Route::put('/roles-permissions-management/roles/{role}', [RolePermissionController::class, 'update'])->name('roles-permissions.update');
+    Route::patch('/roles-permissions-management/roles/{role}/toggle-active', [RolePermissionController::class, 'toggleActive'])->name('roles-permissions.toggle-active');
     Route::delete('/roles-permissions-management/roles/{role}', [RolePermissionController::class, 'destroy'])->name('roles-permissions.destroy');
     Route::post('/roles-permissions-management/permissions', [RolePermissionController::class, 'syncPermissions'])->name('roles-permissions.sync');
 });

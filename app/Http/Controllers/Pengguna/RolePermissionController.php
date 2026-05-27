@@ -21,10 +21,7 @@ class RolePermissionController extends Controller
         $this->roleService = $roleService;
     }
 
-    /**
-     * Display the roles & permissions management page.
-     */
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         $roles = \App\Models\Role::where('is_active', '1')
             ->with('permissions')
@@ -37,6 +34,10 @@ class RolePermissionController extends Controller
             if ($role->slug === 'user') return 99;
             return 10;
         });
+
+        if ($request->ajax()) {
+            return view('pages.pengguna.role-permission.partials.matrix-table', compact('roles'));
+        }
 
         return view('pages.pengguna.role-permission.index', compact('roles'));
     }
@@ -126,5 +127,30 @@ class RolePermissionController extends Controller
         app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         return ResponseHelper::jsonResponse(true, 'Perubahan izin berhasil disimpan!', null, 200);
+    }
+
+    /**
+     * Toggle the active state of a role.
+     *
+     * @param Role $role
+     * @return JsonResponse
+     */
+    public function toggleActive(Role $role): JsonResponse
+    {
+        // System roles cannot be deactivated
+        if (in_array($role->slug, ['dev', 'admin', 'user'])) {
+            return ResponseHelper::jsonResponse(false, 'Role bawaan sistem tidak dapat dinonaktifkan.', null, 422);
+        }
+
+        $newStatus = $role->is_active === '1' ? '0' : '1';
+        $role->update(['is_active' => $newStatus]);
+
+        $message = $newStatus === '1' 
+            ? 'Role "' . $role->name . '" berhasil diaktifkan.' 
+            : 'Role "' . $role->name . '" berhasil dinonaktifkan.';
+
+        return ResponseHelper::jsonResponse(true, $message, [
+            'is_active' => $newStatus
+        ], 200);
     }
 }

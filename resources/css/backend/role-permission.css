@@ -553,4 +553,38 @@
   display: inline-block;
 }
 
+/* Inactive Role Card Styles */
+.role-card.role-inactive {
+  background: #f3eee6 !important;
+  border-color: #d8cebe !important;
+  box-shadow: none !important;
+  opacity: 0.78;
+}
+.role-card.role-inactive::before {
+  background: #a19582 !important;
+}
+.role-card.role-inactive .role-icon {
+  background: #a19582 !important;
+  color: #fff !important;
+}
+.role-card.role-inactive .role-name,
+.role-card.role-inactive .role-desc,
+.role-card.role-inactive .role-user-count {
+  color: #837562 !important;
+}
+.role-card.role-inactive .role-perm-count {
+  background: rgba(161,149,130,.1) !important;
+  color: #837562 !important;
+  border: 1px solid rgba(161,149,130,.25) !important;
+}
+.role-card.role-inactive .rc-btn.edit,
+.role-card.role-inactive .rc-btn.del {
+  border-color: #d8cebe !important;
+  color: #837562 !important;
+}
+.role-card.role-inactive .rc-btn.edit:hover,
+.role-card.role-inactive .rc-btn.del:hover {
+  background: #e7dfd1 !important;
+}
+
 

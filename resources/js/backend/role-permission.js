@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   let loadedRolesCache = [];
+  let isInitialLoad = true;
 
   /* ════════════════════════════════════════════
      AJAX ROLE DATA LOADING
@@ -73,16 +74,26 @@ document.addEventListener('DOMContentLoaded', () => {
           response.data.forEach(role => {
             const config = getRoleConfig(role);
             const isDev = role.slug === 'dev';
+            const isSystem = ['dev', 'admin', 'user'].includes(role.slug);
+            const isActive = role.is_active === '1';
             const userCountStr = Number(role.users_count).toLocaleString('id-ID');
             const permCountStr = isDev ? 'Semua Akses' : `${role.permissions_count} izin`;
 
-            let actionsHtml = `<button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('${role.id}')"><i class="bi bi-pencil"></i></button>`;
+            let actionsHtml = '';
+            if (!isSystem) {
+              const toggleIcon = isActive ? 'bi-toggle-on' : 'bi-toggle-off';
+              const toggleColor = isActive ? 'color: #22c55e;' : 'color: #ef4444;';
+              const toggleTitle = isActive ? 'Nonaktifkan Role' : 'Aktifkan Role';
+              actionsHtml += `<button class="rc-btn toggle-active" title="${toggleTitle}" style="${toggleColor}" onclick="event.stopPropagation();toggleRoleActive('${role.id}')"><i class="bi ${toggleIcon}" style="font-size: 1.15rem;"></i></button>`;
+            }
+            actionsHtml += `<button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('${role.id}')"><i class="bi bi-pencil"></i></button>`;
             if (!isDev) {
               actionsHtml += `<button class="rc-btn del" title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('${role.id}')"><i class="bi bi-trash"></i></button>`;
             }
 
+            const cardInactiveClass = isActive ? '' : 'role-inactive';
             const cardHtml = `
-              <div class="role-card ${config.class}" onclick="highlightRole('${role.slug}', event)">
+              <div class="role-card ${config.class} ${cardInactiveClass}" onclick="highlightRole('${role.slug}', event)">
                 <div class="role-card-top">
                   <div class="role-icon">${config.icon}</div>
                   <div class="role-card-actions">
@@ -101,11 +112,25 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
         $grid.append($addCard);
+        if (isInitialLoad) {
+          isInitialLoad = false;
+        } else {
+          if (window.loadMatrixTable) {
+            window.loadMatrixTable();
+          }
+        }
       },
       error: function(xhr, status, error) {
         $grid.find('.skeleton-card').remove();
         window.showToast('Gagal memuat data peran: ' + error, 'danger');
         $grid.append($addCard);
+        if (isInitialLoad) {
+          isInitialLoad = false;
+        } else {
+          if (window.loadMatrixTable) {
+            window.loadMatrixTable();
+          }
+        }
       }
     });
   }
@@ -400,6 +425,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  window.toggleRoleActive = function(id) {
+    PA.loading({ title: 'Sedang Proses', message: 'Mengubah status keaktifan peran...' });
+
+    $.ajax({
+      url: `/roles-permissions-management/roles/${id}/toggle-active`,
+      method: 'PATCH',
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      dataType: 'json',
+      success: function(response) {
+        PA.closeAll();
+        window.showToast(response.message || 'Status peran berhasil diubah', 'success');
+        loadRoles();
+      },
+      error: function(xhr) {
+        PA.closeAll();
+        let errorMsg = 'Terjadi kesalahan sistem, silakan coba lagi.';
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          errorMsg = xhr.responseJSON.message;
+        }
+        window.showToast(errorMsg, 'danger');
+      }
+    });
+  }
+
   /* ════════════════════════════════════════════
      PERMISSION MATRIX
   ════════════════════════════════════════════ */
@@ -416,12 +467,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* Snapshot initial state */
-  document.querySelectorAll('.perm-toggle').forEach((cb, i) => {
-    origState[i] = cb.checked;
-  });
+  window.initMatrixState = function() {
+    for (let key in origState) {
+      delete origState[key];
+    }
+    document.querySelectorAll('.perm-toggle').forEach((cb, i) => {
+      origState[i] = cb.checked;
+    });
+    updateSelectAllHeaders();
 
-  updateSelectAllHeaders();
+    const badge = document.getElementById('changeCount');
+    if (badge) {
+      badge.innerHTML = '<i class="bi bi-pencil-fill"></i> 0 perubahan';
+      badge.style.display = 'none';
+    }
+  }
+
+  window.loadMatrixTable = function() {
+    const $container = $('#matrixTableWrapper');
+    if (!$container.length) return;
+
+    $.ajax({
+      url: '/roles-permissions-management',
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      success: function(html) {
+        $container.html(html);
+        initMatrixState();
+      },
+      error: function(xhr, status, error) {
+        console.error('Gagal memuat matriks izin: ' + error);
+      }
+    });
+  }
+
+  // Initialize on load
+  initMatrixState();
 
   /* Re-trigger CSS animation on a checkbox (needed for subsequent toggles) */
   function triggerCheckAnim(cb) {
