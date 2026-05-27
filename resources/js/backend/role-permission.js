@@ -335,8 +335,8 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'warning',
       title: 'Hapus Peran?',
       message: `Apakah Anda yakin ingin menghapus peran "${role.name}"? Tindakan ini tidak dapat dibatalkan.`,
-      confirm: { text: 'Ya, Hapus', cls: 'pa-btn-danger' },
-      cancel: { text: 'Batal' }
+      confirm: { text: 'Ya, Hapus', cls: 'pa-btn-sidebar' },
+      cancel: 'Batal'
     }).then((result) => {
       if (result) {
         // Show loading state

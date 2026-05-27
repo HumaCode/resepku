@@ -98,6 +98,7 @@
 .pa-btn-warning  { background:linear-gradient(135deg,var(--pa-amber), var(--pa-amber-dk));  color:#fff; box-shadow:0 4px 16px rgba(245,158,11,.30); }
 .pa-btn-info     { background:linear-gradient(135deg,var(--pa-blue),  var(--pa-blue-dk));   color:#fff; box-shadow:0 4px 16px rgba(232,93,38,.30);  }
 .pa-btn-question { background:linear-gradient(135deg,var(--pa-purple),#5b21b6);             color:#fff; box-shadow:0 4px 16px rgba(124,58,237,.30); }
+.pa-btn-sidebar  { background:linear-gradient(135deg,var(--secondary, #2d1b0e), var(--sidebar-bg, #1e1208)); color:#fff; box-shadow:0 4px 16px rgba(30,18,8,.35); border: 1px solid rgba(255,255,255,.08); }
 
 /* ══════════════════════════
    1. DIALOG

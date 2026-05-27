@@ -117,8 +117,30 @@
 
     const type  = opts.type;
     const def   = CONFIRM_DEFAULTS[type] || CONFIRM_DEFAULTS.info;
-    const cfTxt = opts.confirm || def.text;
-    const cfCls = def.cls;
+    
+    let cfTxt   = def.text;
+    let cfCls   = def.cls;
+    if (opts.confirm) {
+      if (typeof opts.confirm === 'object') {
+        cfTxt = opts.confirm.text || def.text;
+        cfCls = opts.confirm.cls || def.cls;
+      } else {
+        cfTxt = opts.confirm;
+      }
+    }
+
+    let cnTxt   = 'Batal';
+    let cnCls   = 'pa-btn pa-btn-cancel pa-dlg-cancel';
+    if (opts.cancel !== false) {
+      if (typeof opts.cancel === 'object') {
+        cnTxt = opts.cancel.text || 'Batal';
+        if (opts.cancel.cls) {
+          cnCls = `pa-btn ${opts.cancel.cls} pa-dlg-cancel`;
+        }
+      } else {
+        cnTxt = opts.cancel;
+      }
+    }
 
     return new Promise(resolve => {
       const bd  = mkBackdrop(type);
@@ -136,7 +158,7 @@
         </div>
         <div class="pa-dialog-footer">
           ${opts.cancel !== false
-            ? `<button class="pa-btn pa-btn-cancel pa-dlg-cancel">${esc(opts.cancel)}</button>`
+            ? `<button class="${cnCls}">${esc(cnTxt)}</button>`
             : ''}
           <button class="pa-btn ${cfCls} pa-dlg-ok">${esc(cfTxt)}</button>
         </div>`;
