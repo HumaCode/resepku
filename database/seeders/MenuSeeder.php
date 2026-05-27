@@ -114,14 +114,6 @@ class MenuSeeder extends Seeder
 
             // ROLE PERMISSION
             [
-                'name' => 'Role',
-                'url' => 'roles',
-                'category' => 'ROLE PERMISSION',
-                'icon' => 'bi-shield-lock',
-                'is_active' => '1',
-                'orders' => 13,
-            ],
-            [
                 'name' => 'Permission',
                 'url' => 'permissions',
                 'category' => 'ROLE PERMISSION',
