@@ -15,27 +15,27 @@
           <!-- Left Column: Details -->
           <div class="col-lg-6">
             <div class="mb-3">
-              <label class="form-label-m">Nama Role <span class="req">*</span></label>
-              <input type="text" class="form-input-m" id="roleNameInput" placeholder="cth: Editor, Reviewer..."/>
+              <x-form-label :required="true">Nama Role</x-form-label>
+              <x-form-input id="roleNameInput" placeholder="cth: Editor, Reviewer..." />
               <div class="form-hint-m">Gunakan nama yang jelas dan mudah dipahami</div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label-m">Slug (kode sistem)</label>
-              <input type="text" class="form-input-m" id="roleSlugInput" placeholder="editor" style="font-family:monospace"/>
+              <x-form-label>Slug (kode sistem)</x-form-label>
+              <x-form-input id="roleSlugInput" placeholder="editor" style="font-family:monospace" />
               <div class="form-hint-m">Lowercase, tanpa spasi. Diisi otomatis dari nama.</div>
             </div>
 
             <div class="mb-0">
-              <label class="form-label-m">Deskripsi</label>
-              <textarea class="form-input-m" rows="4" id="roleDescInput" placeholder="Jelaskan tugas dan tanggung jawab role ini..." style="resize:none"></textarea>
+              <x-form-label>Deskripsi</x-form-label>
+              <x-form-textarea id="roleDescInput" placeholder="Jelaskan tugas dan tanggung jawab role ini..." rows="4" style="resize:none" />
             </div>
           </div>
 
           <!-- Right Column: Visuals -->
           <div class="col-lg-6">
             <div class="mb-3">
-              <label class="form-label-m">Warna / Tema</label>
+              <x-form-label>Warna / Tema</x-form-label>
               <div class="color-picker-wrap">
                 <div class="color-swatch sel" data-color="#e85d26" style="background:#e85d26" onclick="pickColor(this)"></div>
                 <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b" onclick="pickColor(this)"></div>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="mb-0">
-              <label class="form-label-m">Ikon</label>
+              <x-form-label>Ikon</x-form-label>
               <div class="icon-selector-grid">
                 <span class="icon-opt sel" data-icon="👤" onclick="pickIcon(this)">👤</span>
                 <span class="icon-opt" data-icon="👑" onclick="pickIcon(this)">👑</span>
@@ -81,8 +81,8 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <button class="btn-modal-cancel" data-bs-dismiss="modal">Batal</button>
-        <button class="btn-modal-primary" onclick="saveRole()"><i class="bi bi-floppy"></i> Simpan Role</button>
+        <x-modal-button variant="cancel" data-bs-dismiss="modal">Batal</x-modal-button>
+        <x-modal-button variant="primary" onclick="saveRole()"><i class="bi bi-floppy"></i> Simpan Role</x-modal-button>
       </div>
     </div>
   </div>
@@ -100,8 +100,8 @@
           <span style="color:var(--danger);font-size:.76rem">⚠ Pengguna dengan role ini akan direset ke Member.</span>
         </p>
         <div class="d-flex gap-2 justify-content-center">
-          <button class="btn-modal-cancel" data-bs-dismiss="modal">Batal</button>
-          <button class="btn-del-ok" onclick="confirmDeleteRole()"><i class="bi bi-trash"></i> Hapus</button>
+          <x-modal-button variant="cancel" data-bs-dismiss="modal">Batal</x-modal-button>
+          <x-modal-button variant="danger" onclick="confirmDeleteRole()"><i class="bi bi-trash"></i> Hapus</x-modal-button>
         </div>
       </div>
     </div>
