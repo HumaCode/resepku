@@ -158,9 +158,9 @@
         </div>
         <div class="pa-dialog-footer">
           ${opts.cancel !== false
-            ? `<button class="${cnCls}">${esc(cnTxt)}</button>`
+            ? `<button class="${cnCls}">${cnTxt}</button>`
             : ''}
-          <button class="pa-btn ${cfCls} pa-dlg-ok">${esc(cfTxt)}</button>
+          <button class="pa-btn ${cfCls} pa-dlg-ok">${cfTxt}</button>
         </div>`;
 
       bd.appendChild(box);
