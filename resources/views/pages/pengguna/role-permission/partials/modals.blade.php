@@ -5,8 +5,8 @@
       <div class="modal-header-custom">
         <div class="modal-header-icon" id="modalRoleIcon"><i class="bi bi-person-badge"></i></div>
         <div>
-          <div class="modal-header-title" id="modalRoleTitle">Tambah Role Baru</div>
-          <div class="modal-header-sub" id="modalRoleSub">Buat peran baru dengan izin custom</div>
+          <div class="modal-header-title" id="modalRoleTitle">{{ __('role_permission.modal.title_add') }}</div>
+          <div class="modal-header-sub" id="modalRoleSub">{{ __('role_permission.modal.sub_add') }}</div>
         </div>
         <button class="modal-close" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
       </div>
@@ -15,27 +15,27 @@
           <!-- Left Column: Details -->
           <div class="col-lg-6">
             <div class="mb-3">
-              <x-form-label :required="true">Nama Role</x-form-label>
-              <x-form-input id="roleNameInput" placeholder="cth: Editor, Reviewer..." />
-              <div class="form-hint-m">Gunakan nama yang jelas dan mudah dipahami</div>
+              <x-form-label :required="true">{{ __('role_permission.modal.label_name') }}</x-form-label>
+              <x-form-input id="roleNameInput" :placeholder="__('role_permission.modal.placeholder_name')" />
+              <div class="form-hint-m">{{ __('role_permission.modal.hint_name') }}</div>
             </div>
 
             <div class="mb-3">
-              <x-form-label>Slug (kode sistem)</x-form-label>
-              <x-form-input id="roleSlugInput" placeholder="editor" style="font-family:monospace" />
-              <div class="form-hint-m">Lowercase, tanpa spasi. Diisi otomatis dari nama.</div>
+              <x-form-label>{{ __('role_permission.modal.label_slug') }}</x-form-label>
+              <x-form-input id="roleSlugInput" :placeholder="__('role_permission.modal.placeholder_slug')" style="font-family:monospace" />
+              <div class="form-hint-m">{{ __('role_permission.modal.hint_slug') }}</div>
             </div>
 
             <div class="mb-0">
-              <x-form-label>Deskripsi</x-form-label>
-              <x-form-textarea id="roleDescInput" placeholder="Jelaskan tugas dan tanggung jawab role ini..." rows="4" style="resize:none" />
+              <x-form-label>{{ __('role_permission.modal.label_desc') }}</x-form-label>
+              <x-form-textarea id="roleDescInput" :placeholder="__('role_permission.modal.placeholder_desc')" rows="4" style="resize:none" />
             </div>
           </div>
 
           <!-- Right Column: Visuals -->
           <div class="col-lg-6">
             <div class="mb-3">
-              <x-form-label>Warna / Tema</x-form-label>
+              <x-form-label>{{ __('role_permission.modal.label_color') }}</x-form-label>
               <div class="color-picker-wrap">
                 <div class="color-swatch sel" data-color="#e85d26" style="background:#e85d26" onclick="pickColor(this)"></div>
                 <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b" onclick="pickColor(this)"></div>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="mb-0">
-              <x-form-label>Ikon</x-form-label>
+              <x-form-label>{{ __('role_permission.modal.label_icon') }}</x-form-label>
               <div class="icon-selector-grid">
                 <span class="icon-opt sel" data-icon="👤" onclick="pickIcon(this)">👤</span>
                 <span class="icon-opt" data-icon="👑" onclick="pickIcon(this)">👑</span>
@@ -81,10 +81,9 @@
         </div>
       </div>
       <div class="modal-footer-custom">
-        <x-modal-button variant="cancel" data-bs-dismiss="modal">Batal</x-modal-button>
-        <x-modal-button variant="primary" onclick="saveRole()"><i class="bi bi-floppy"></i> Simpan Role</x-modal-button>
+        <x-modal-button variant="cancel" data-bs-dismiss="modal">{{ __('role_permission.modal.btn_cancel') }}</x-modal-button>
+        <x-modal-button variant="primary" onclick="saveRole()"><i class="bi bi-floppy"></i> {{ __('role_permission.modal.btn_save') }}</x-modal-button>
       </div>
     </div>
   </div>
 </div>
-
