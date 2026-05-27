@@ -482,6 +482,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const $container = $('#matrixTableWrapper');
     if (!$container.length) return;
 
+    // Show loading overlay
+    $('#matrixCard').addClass('loading');
+
     $.ajax({
       url: '/roles-permissions-management',
       method: 'GET',
@@ -492,11 +495,56 @@ document.addEventListener('DOMContentLoaded', () => {
       success: function(html) {
         $container.html(html);
         initMatrixState();
+
+        // Update #roleFilter select dropdown dynamically
+        const $select = $('#roleFilter');
+        if ($select.length) {
+          const currentValue = $select.val() || 'all';
+          $select.empty().append('<option value="all">Tampilkan semua</option>');
+          
+          // Get all role column headers (excluding dev) from the loaded table
+          $('#permTable thead th[data-col]').each(function() {
+            const slug = $(this).attr('data-col');
+            if (slug !== 'dev') {
+              const nameRaw = $(this).find('.role-th-pill').text().trim();
+              // Remove emoji prefix and extra whitespace
+              const nameClean = nameRaw.replace(/^[^a-zA-Z0-9]*/, '').trim();
+              $select.append(`<option value="${slug}">${nameClean}</option>`);
+            }
+          });
+          
+          // Restore selected value if it still exists
+          if ($select.find(`option[value="${currentValue}"]`).length) {
+            $select.val(currentValue);
+          } else {
+            $select.val('all');
+          }
+        }
+
+        // Hide loading overlay
+        $('#matrixCard').removeClass('loading');
       },
       error: function(xhr, status, error) {
         console.error('Gagal memuat matriks izin: ' + error);
+        // Hide loading overlay
+        $('#matrixCard').removeClass('loading');
       }
     });
+  }
+
+  /* ════════════════════════════════════════════
+     ROLE FILTER (MOBILE)
+  ════════════════════════════════════════════ */
+  window.filterByRole = function(roleSlug) {
+    const $table = $('#permTable');
+    if (!$table.length) return;
+
+    if (roleSlug === 'all') {
+      $table.find('[data-col]').show();
+    } else {
+      $table.find('[data-col]').hide();
+      $table.find(`[data-col="${roleSlug}"]`).show();
+    }
   }
 
   // Initialize on load

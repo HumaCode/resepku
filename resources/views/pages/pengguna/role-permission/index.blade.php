@@ -120,7 +120,13 @@
     </div>
 
     <!-- ══ PERMISSION MATRIX ══ -->
-    <div class="matrix-card" data-aos="fade-up" data-aos-delay="100">
+    <div class="matrix-card" id="matrixCard" data-aos="fade-up" data-aos-delay="100">
+      <!-- Loading Overlay -->
+      <div class="matrix-card-overlay">
+        <div class="matrix-spinner"></div>
+        <div class="matrix-loading-text">Menyinkronkan Matriks...</div>
+      </div>
+
       <div class="matrix-header">
         <div class="matrix-title-wrap">
           <div class="matrix-icon"><i class="bi bi-table"></i></div>

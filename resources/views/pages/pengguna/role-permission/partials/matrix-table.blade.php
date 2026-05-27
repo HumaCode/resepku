@@ -121,7 +121,7 @@
                       $b2 = isset($m2[3]) ? hexdec($m2[3]) : 139;
                       $ringColor2 = "rgba($r2,$g2,$b2,0.3)";
                     @endphp
-                    <td>
+                    <td data-col="{{ $role->slug }}">
                       @if($role->slug === 'dev')
                         <i class="bi bi-lock-fill perm-lock"></i>
                       @else
