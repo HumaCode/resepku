@@ -3,6 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
      AJAX ROLE DATA LOADING
      ════════════════════════════════════════════ */
   function getRoleConfig(role) {
+    if (role.slug === 'dev') {
+      return { title: 'Super Admin', class: 'role-super', icon: '👑' };
+    }
+    if (role.slug === 'admin') {
+      return { title: 'Admin', class: 'role-admin', icon: '🛡️' };
+    }
+    if (role.slug === 'user') {
+      return { title: 'Member', class: 'role-member', icon: '👤' };
+    }
+
+    // Default & Fallback options for other custom roles
     const colorClasses = {
       '#f59e0b': 'role-super',
       '#e85d26': 'role-admin',
@@ -13,26 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
       '#ec4899': 'role-pink',
       '#0d9488': 'role-teal'
     };
-    
-    let cardClass = colorClasses[role.color] || 'role-member';
-    let icon = role.icon || '👤';
-    let title = role.name;
-    
-    if (role.slug === 'dev') {
-      title = 'Super Admin';
-      cardClass = 'role-super';
-      icon = '👑';
-    } else if (role.slug === 'admin') {
-      title = 'Admin';
-      cardClass = 'role-admin';
-      icon = '🛡️';
-    } else if (role.slug === 'user') {
-      title = 'Member';
-      cardClass = 'role-member';
-      icon = '👤';
-    }
-    
-    return { title: title, class: cardClass, icon: icon };
+
+    return {
+      title: role.name,
+      class: colorClasses[role.color] || 'role-member',
+      icon: role.icon || '👤'
+    };
   }
 
   function loadRoles() {
