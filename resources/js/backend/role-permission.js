@@ -112,6 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
         $grid.append($addCard);
+
+        // Automatically reload permission matrix table sequentially
+        if (window.loadMatrixTable) {
+          window.loadMatrixTable();
+        }
       },
       error: function(xhr, status, error) {
         $grid.find('.skeleton-card').remove();
@@ -322,11 +327,8 @@ document.addEventListener('DOMContentLoaded', () => {
           position: 'bottom-center'
         });
         
-        // Reload role cards and matrix table
+        // Reload role cards (which automatically reloads matrix table)
         loadRoles();
-        if (window.loadMatrixTable) {
-          window.loadMatrixTable();
-        }
       },
       error: function(xhr) {
         // Reset buttons
@@ -394,9 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
               position: 'bottom-center'
             });
             loadRoles();
-            if (window.loadMatrixTable) {
-              window.loadMatrixTable();
-            }
           },
           error: function(xhr) {
             PA.closeAll();
@@ -431,9 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
         PA.closeAll();
         window.showToast(response.message || 'Status peran berhasil diubah', 'success');
         loadRoles();
-        if (window.loadMatrixTable) {
-          window.loadMatrixTable();
-        }
       },
       error: function(xhr) {
         PA.closeAll();

@@ -66,6 +66,9 @@ class RolePermissionController extends Controller
         $role = $this->roleService->createRole($request->validated());
         $data = new RoleResource($role);
 
+        // Clear Spatie Permission cache
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
         return ResponseHelper::jsonResponse(true, 'Role baru berhasil disimpan', $data, 201);
     }
 
@@ -88,6 +91,9 @@ class RolePermissionController extends Controller
         $updatedRole = $this->roleService->updateRole($role, $request->validated());
         $data = new RoleResource($updatedRole);
 
+        // Clear Spatie Permission cache
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
         return ResponseHelper::jsonResponse(true, 'Role berhasil diperbarui', $data, 200);
     }
 
@@ -105,6 +111,9 @@ class RolePermissionController extends Controller
         }
 
         $this->roleService->deleteRole($role);
+
+        // Clear Spatie Permission cache
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         return ResponseHelper::jsonResponse(true, 'Role berhasil dihapus', null, 200);
     }
@@ -144,6 +153,9 @@ class RolePermissionController extends Controller
 
         $newStatus = $role->is_active === '1' ? '0' : '1';
         $role->update(['is_active' => $newStatus]);
+
+        // Clear Spatie Permission cache
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         $message = $newStatus === '1' 
             ? 'Role "' . $role->name . '" berhasil diaktifkan.' 
