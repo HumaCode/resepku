@@ -12,4 +12,12 @@ interface RoleRepositoryInterface
      * @return Collection
      */
     public function getAllRoles(): Collection;
+
+    /**
+     * Create a new role.
+     *
+     * @param array $data
+     * @return \App\Models\Role
+     */
+    public function createRole(array $data);
 }

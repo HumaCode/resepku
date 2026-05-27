@@ -369,3 +369,17 @@
   }
 }
 
+/* Custom Role Themes */
+.role-purple .role-icon { background: linear-gradient(135deg,#c084fc,#a855f7); }
+.role-purple::before    { background: linear-gradient(90deg,#a855f7,#7c3aed); }
+.role-purple .role-perm-count { background: rgba(168,85,247,.1); color: #7c3aed; border: 1px solid rgba(168,85,247,.25); }
+
+.role-pink .role-icon { background: linear-gradient(135deg,#f472b6,#ec4899); }
+.role-pink::before    { background: linear-gradient(90deg,#ec4899,#db2777); }
+.role-pink .role-perm-count { background: rgba(236,72,153,.1); color: #db2777; border: 1px solid rgba(236,72,153,.25); }
+
+.role-teal .role-icon { background: linear-gradient(135deg,#2dd4bf,#0d9488); }
+.role-teal::before    { background: linear-gradient(90deg,#0d9488,#0f766e); }
+.role-teal .role-perm-count { background: rgba(13,148,136,.1); color: #0f766e; border: 1px solid rgba(13,148,136,.25); }
+
+

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Spatie\Permission\Models\Role as SpatieRole;
 
-#[Fillable(['name', 'guard_name', 'slug', 'type_role', 'description', 'is_active'])]
+#[Fillable(['name', 'guard_name', 'slug', 'type_role', 'description', 'is_active', 'color', 'icon'])]
 class Role extends SpatieRole
 {
     use HasUlids;

@@ -2,17 +2,37 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ════════════════════════════════════════════
      AJAX ROLE DATA LOADING
      ════════════════════════════════════════════ */
-  function getRoleConfig(slug) {
-    switch (slug) {
-      case 'dev':
-        return { title: 'Super Admin', class: 'role-super', icon: '👑' };
-      case 'admin':
-        return { title: 'Admin', class: 'role-admin', icon: '🛡️' };
-      case 'user':
-        return { title: 'Member', class: 'role-member', icon: '👤' };
-      default:
-        return { title: slug.charAt(0).toUpperCase() + slug.slice(1), class: 'role-member', icon: '👤' };
+  function getRoleConfig(role) {
+    const colorClasses = {
+      '#f59e0b': 'role-super',
+      '#e85d26': 'role-admin',
+      '#3b82f6': 'role-mod',
+      '#22c55e': 'role-author',
+      '#64748b': 'role-member',
+      '#a855f7': 'role-purple',
+      '#ec4899': 'role-pink',
+      '#0d9488': 'role-teal'
+    };
+    
+    let cardClass = colorClasses[role.color] || 'role-member';
+    let icon = role.icon || '👤';
+    let title = role.name;
+    
+    if (role.slug === 'dev') {
+      title = 'Super Admin';
+      cardClass = 'role-super';
+      icon = '👑';
+    } else if (role.slug === 'admin') {
+      title = 'Admin';
+      cardClass = 'role-admin';
+      icon = '🛡️';
+    } else if (role.slug === 'user') {
+      title = 'Member';
+      cardClass = 'role-member';
+      icon = '👤';
     }
+    
+    return { title: title, class: cardClass, icon: icon };
   }
 
   function loadRoles() {
@@ -30,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $grid.find('.loading-state').remove();
         if (response.success && response.data) {
           response.data.forEach(role => {
-            const config = getRoleConfig(role.slug);
+            const config = getRoleConfig(role);
             const isDev = role.slug === 'dev';
             const userCountStr = Number(role.users_count).toLocaleString('id-ID');
             const permCountStr = isDev ? 'Semua Akses' : `${role.permissions_count} izin`;
@@ -137,20 +157,117 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.saveRole = function() {
-    const nameInputEl = document.getElementById('roleNameInput');
-    if (!nameInputEl) return;
-    const name = nameInputEl.value.trim();
+    const $nameInput = $('#roleNameInput');
+    const $slugInput = $('#roleSlugInput');
+    const $descInput = $('#roleDescInput');
+    
+    const name = $nameInput.val().trim();
+    const slug = $slugInput.val().trim();
+    const description = $descInput.val().trim();
+    const color = $('.color-swatch.sel').attr('data-color') || '';
+    const icon = $('.icon-opt.sel').attr('data-icon') || '';
+    
+    // Reset validation styles
+    $nameInput.css('border-color', '');
+    $slugInput.css('border-color', '');
+    
+    let isValid = true;
     if (!name) {
-      nameInputEl.style.borderColor = 'var(--danger)';
-      nameInputEl.focus();
-      return;
+      $nameInput.css('border-color', 'var(--danger)');
+      $nameInput.focus();
+      isValid = false;
     }
-    const modalEl = document.getElementById('modalRole');
-    if (modalEl && window.bootstrap) {
-      const modalInstance = window.bootstrap.Modal.getInstance(modalEl);
-      if (modalInstance) modalInstance.hide();
+    if (!slug) {
+      $slugInput.css('border-color', 'var(--danger)');
+      if (isValid) {
+        $slugInput.focus();
+      }
+      isValid = false;
     }
-    window.showToast('Role "' + name + '" berhasil disimpan', 'success');
+    
+    if (!isValid) return;
+    
+    // Get Save button and Cancel button
+    const $saveBtn = $('.btn-modal-primary');
+    const $cancelBtn = $('.btn-modal-cancel');
+    const originalSaveHtml = $saveBtn.html();
+    
+    // Set loading state: disable buttons & show spinner
+    $saveBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sedang proses...');
+    $cancelBtn.prop('disabled', true);
+    
+    $.ajax({
+      url: '/roles-permissions-management/roles',
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      dataType: 'json',
+      data: {
+        name: name,
+        slug: slug,
+        description: description,
+        color: color,
+        icon: icon
+      },
+      success: function(response) {
+        // Reset buttons
+        $saveBtn.prop('disabled', false).html(originalSaveHtml);
+        $cancelBtn.prop('disabled', false);
+        
+        // Hide Modal
+        const modalEl = document.getElementById('modalRole');
+        if (modalEl && window.bootstrap) {
+          const modalInstance = window.bootstrap.Modal.getInstance(modalEl) || new window.bootstrap.Modal(modalEl);
+          modalInstance.hide();
+        }
+        
+        // Clear inputs
+        $nameInput.val('');
+        $slugInput.val('');
+        $descInput.val('');
+        
+        // Success Toast
+        PA.toast({
+          type: 'success',
+          title: 'Sukses',
+          message: response.message || 'Role baru berhasil disimpan',
+          duration: 4000,
+          position: 'bottom-center'
+        });
+        
+        // Reload role cards
+        loadRoles();
+      },
+      error: function(xhr) {
+        // Reset buttons
+        $saveBtn.prop('disabled', false).html(originalSaveHtml);
+        $cancelBtn.prop('disabled', false);
+        
+        // Handle validation errors or general error message
+        let errorMsg = 'Terjadi kesalahan sistem, silakan coba lagi.';
+        if (xhr.status === 422 && xhr.responseJSON?.errors) {
+          const errors = xhr.responseJSON.errors;
+          const firstErrorKey = Object.keys(errors)[0];
+          errorMsg = errors[firstErrorKey][0];
+          
+          // Highlight fields
+          if (errors.name) $nameInput.css('border-color', 'var(--danger)');
+          if (errors.slug) $slugInput.css('border-color', 'var(--danger)');
+        } else if (xhr.responseJSON?.message) {
+          errorMsg = xhr.responseJSON.message;
+        }
+        
+        // Error Toast
+        PA.toast({
+          type: 'danger',
+          title: 'Kesalahan Sistem',
+          message: errorMsg,
+          duration: 5000,
+          position: 'bottom-center'
+        });
+      }
+    });
   }
 
   /* ════════════════════════════════════════════
@@ -239,17 +356,19 @@ document.addEventListener('DOMContentLoaded', () => {
      TOAST
   ════════════════════════════════════════════ */
   window.showToast = function(msg, type = 'info') {
-    const wrap = document.getElementById('toastWrap');
-    if (!wrap) return;
-    const t    = document.createElement('div');
-    const icon = { success:'bi-check2-circle', danger:'bi-x-circle', info:'bi-info-circle' }[type] || 'bi-info-circle';
-    t.className = `toast-item toast-${type}`;
-    t.innerHTML = `<i class="bi ${icon}"></i> ${msg}`;
-    wrap.appendChild(t);
-    setTimeout(() => {
-      t.classList.add('removing');
-      setTimeout(() => t.remove(), 320);
-    }, 3000);
+    const titles = {
+      success: 'Sukses',
+      danger: 'Error',
+      info: 'Informasi',
+      warning: 'Peringatan'
+    };
+    PA.toast({
+      type: type,
+      title: titles[type] || 'Notifikasi',
+      message: msg,
+      duration: 4000,
+      position: 'bottom-center'
+    });
   }
 
   /* Hide change badge awal */

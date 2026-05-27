@@ -21,6 +21,8 @@ class RoleResource extends JsonResource
             'type_role' => $this->type_role,
             'description' => $this->description,
             'is_active' => $this->is_active,
+            'color' => $this->color,
+            'icon' => $this->icon,
             'users_count' => $this->users_count ?? 0,
             'permissions_count' => $this->permissions_count ?? 0,
         ];

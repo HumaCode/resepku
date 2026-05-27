@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/roles-permissions-management', [RolePermissionController::class, 'index'])->name('roles-permissions.index');
     Route::get('/roles-permissions-management/roles', [RolePermissionController::class, 'getRoles'])->name('roles-permissions.roles');
+    Route::post('/roles-permissions-management/roles', [RolePermissionController::class, 'store'])->name('roles-permissions.store');
 });
 
 require __DIR__.'/auth.php';

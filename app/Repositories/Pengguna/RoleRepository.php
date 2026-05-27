@@ -16,4 +16,16 @@ class RoleRepository implements RoleRepositoryInterface
     {
         return Role::withCount(['users', 'permissions'])->get();
     }
+
+    /**
+     * Create a new role.
+     *
+     * @param array $data
+     * @return Role
+     */
+    public function createRole(array $data)
+    {
+        $data['guard_name'] = $data['guard_name'] ?? 'web';
+        return Role::create($data);
+    }
 }

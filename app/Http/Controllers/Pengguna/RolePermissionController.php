@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Pengguna\RoleService;
 use App\Http\Resources\Pengguna\RoleResource;
 use App\Helpers\ResponseHelper;
+use App\Http\Requests\Pengguna\StoreRoleRequest;
 use Illuminate\Http\JsonResponse;
 
 class RolePermissionController extends Controller
@@ -36,5 +37,19 @@ class RolePermissionController extends Controller
         $data = RoleResource::collection($roles);
 
         return ResponseHelper::jsonResponse(true, 'Data role berhasil diambil', $data, 200);
+    }
+
+    /**
+     * Store a newly created role.
+     *
+     * @param StoreRoleRequest $request
+     * @return JsonResponse
+     */
+    public function store(StoreRoleRequest $request): JsonResponse
+    {
+        $role = $this->roleService->createRole($request->validated());
+        $data = new RoleResource($role);
+
+        return ResponseHelper::jsonResponse(true, 'Role baru berhasil disimpan', $data, 201);
     }
 }

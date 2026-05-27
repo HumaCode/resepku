@@ -23,4 +23,15 @@ class RoleService
     {
         return $this->roleRepository->getAllRoles();
     }
+
+    /**
+     * Create a new role.
+     *
+     * @param array $data
+     * @return \App\Models\Role
+     */
+    public function createRole(array $data)
+    {
+        return $this->roleRepository->createRole($data);
+    }
 }

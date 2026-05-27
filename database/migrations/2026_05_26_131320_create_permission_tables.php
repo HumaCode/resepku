@@ -47,6 +47,8 @@ return new class extends Migration
             $table->enum('type_role', ['system', 'custom'])->default('custom')->index();
             $table->text('description')->nullable();
             $table->enum('is_active', ['0', '1'])->default('1')->index();
+            $table->string('color')->nullable();
+            $table->string('icon')->nullable();
             $table->string('guard_name');
             $table->timestamps();
             if ($teams || config('permission.testing')) {
