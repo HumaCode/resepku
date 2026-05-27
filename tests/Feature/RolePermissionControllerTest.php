@@ -20,6 +20,26 @@ test('authenticated user can view roles and permissions page', function () {
         ->assertViewIs('pages.pengguna.role-permission.index');
 });
 
+test('authenticated user can view matrix table via AJAX', function () {
+    $user = User::factory()->create();
+
+    // Create a custom role to verify it gets rendered
+    Role::create([
+        'name' => 'editor',
+        'guard_name' => 'web',
+        'slug' => 'editor',
+        'type_role' => 'custom',
+        'description' => 'Editor role description',
+        'is_active' => '1',
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('roles-permissions.index'), ['X-Requested-With' => 'XMLHttpRequest'])
+        ->assertSuccessful()
+        ->assertViewIs('pages.pengguna.role-permission.partials.matrix-table')
+        ->assertSee('editor');
+});
+
 test('authenticated user can fetch roles data via AJAX', function () {
     $user = User::factory()->create();
 

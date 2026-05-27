@@ -88,22 +88,3 @@
   </div>
 </div>
 
-<!-- ══ MODAL HAPUS ROLE ══ -->
-<div class="modal fade modal-custom" id="modalDelRole" tabindex="-1">
-  <div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body-custom text-center py-4">
-        <div class="del-icon-wrap"><i class="bi bi-person-x"></i></div>
-        <h5 style="font-family:'Playfair Display',serif;font-weight:900;color:var(--secondary);margin-bottom:.3rem">Hapus Role?</h5>
-        <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1.25rem">
-          Role <strong id="delRoleName" style="color:var(--secondary)"></strong> akan dihapus.<br>
-          <span style="color:var(--danger);font-size:.76rem">⚠ Pengguna dengan role ini akan direset ke Member.</span>
-        </p>
-        <div class="d-flex gap-2 justify-content-center">
-          <x-modal-button variant="cancel" data-bs-dismiss="modal">Batal</x-modal-button>
-          <x-modal-button variant="danger" onclick="confirmDeleteRole()"><i class="bi bi-trash"></i> Hapus</x-modal-button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

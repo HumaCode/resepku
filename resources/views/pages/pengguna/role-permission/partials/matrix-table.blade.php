@@ -15,7 +15,7 @@
                 @endphp
                 <th data-col="{{ $role->slug }}" style="--cb-color:{{ $roleColor }};--cb-color-ring:{{ $ringColor }}">
                   <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem">
-                    <span class="role-th-pill" style="background:{{ hex2rgba($roleColor, 0.09) }};border-color:{{ hex2rgba($roleColor, 0.25) }};color:{{ $roleColor }}">
+                    <span class="role-th-pill" style="background:rgba({{ $r }},{{ $g }},{{ $b }},0.09);border-color:rgba({{ $r }},{{ $g }},{{ $b }},0.25);color:{{ $roleColor }}">
                       {{ $role->icon ?? '👤' }} {{ $role->slug === 'dev' ? 'Super Admin' : ($role->slug === 'user' ? 'Member' : $role->name) }}
                     </span>
                     <span style="font-size:.65rem;color:var(--muted);font-weight:400">{{ number_format($role->users_count, 0, ',', '.') }} user{{ $role->users_count != 1 ? 's' : '' }}</span>
