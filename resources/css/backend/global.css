@@ -383,6 +383,84 @@ body {
 .dd-divider { height: 1px; background: var(--border); margin: .35rem 0; }
 
 /* ══════════════════════════════
+   CONTENT AREA & BREADCRUMB
+   ══════════════════════════════ */
+.content-area {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+.breadcrumb-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+.bc-left {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+.bc-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.bc-icon,
+.bc-title > i {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1rem;
+  flex-shrink: 0;
+  animation: bcIconSpin 6s linear infinite;
+}
+@keyframes bcIconSpin {
+  0%,90%,100% { transform: rotate(0deg); }
+  95%          { transform: rotate(360deg); }
+}
+.bc-desc {
+  font-size: .82rem;
+  color: var(--muted);
+  padding-left: .2rem;
+}
+.bc-right {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .8rem;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+.bc-right a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+.bc-right a:hover {
+  text-decoration: underline;
+}
+.bc-sep {
+  color: var(--border);
+}
+
+/* ══════════════════════════════
    FOOTER
    ══════════════════════════════ */
 .main-footer {
@@ -509,4 +587,16 @@ body {
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+/* ── BG animated elements ── */
+.bg-float {
+  position: fixed; pointer-events: none; z-index: 0;
+  opacity: 0; animation: bgFloat linear infinite;
+}
+@keyframes bgFloat {
+  0%   { opacity: 0; transform: translateY(110vh) rotate(0deg); }
+  5%   { opacity: .06; }
+  95%  { opacity: .06; }
+  100% { opacity: 0; transform: translateY(-10vh) rotate(180deg); }
 }

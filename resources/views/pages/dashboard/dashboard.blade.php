@@ -2,6 +2,14 @@
     @section('title', 'Dashboard')
     @section('page-title', 'Dashboard')
 
+    @push('styles')
+        @vite(['resources/css/backend/dashboard.css'])
+    @endpush
+
+    @push('scripts')
+        @vite(['resources/js/backend/dashboard.js'])
+    @endpush
+
     <!-- Breadcrumb -->
     <div class="breadcrumb-bar" data-aos="fade-down" data-aos-duration="600">
         <div class="bc-left">

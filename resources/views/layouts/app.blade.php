@@ -14,7 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
     <!-- Vite Assets -->
-    @vite(['resources/css/global.css', 'resources/css/dashboard.css', 'resources/js/dashboard.js'])
+    @vite(['resources/css/backend/global.css', 'resources/js/backend/global.js'])
+    @stack('styles')
 </head>
 <body>
 
@@ -54,5 +55,6 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    @stack('scripts')
 </body>
 </html>
