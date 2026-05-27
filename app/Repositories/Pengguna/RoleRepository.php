@@ -52,4 +52,29 @@ class RoleRepository implements RoleRepositoryInterface
     {
         return $role->delete();
     }
+
+    /**
+     * Sync permissions for a specific role by its slug.
+     *
+     * @param string $roleSlug
+     * @param array $permissionNames
+     * @return void
+     */
+    public function syncPermissionsForRole(string $roleSlug, array $permissionNames): void
+    {
+        $role = Role::where('slug', $roleSlug)->first();
+        if ($role) {
+            // Find or create the permissions to prevent "PermissionDoesNotExist" exception
+            $permissions = [];
+            foreach ($permissionNames as $name) {
+                $permissions[] = \App\Models\Permission::firstOrCreate([
+                    'name' => $name,
+                    'guard_name' => 'web'
+                ]);
+            }
+            
+            // Sync permissions for this role
+            $role->syncPermissions($permissions);
+        }
+    }
 }

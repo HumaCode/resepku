@@ -275,5 +275,47 @@ test('authenticated user cannot delete a system role', function () {
     ]);
 });
 
+test('guest cannot sync permissions', function () {
+    $this->postJson(route('roles-permissions.sync'), [
+        'matrix' => [
+            'admin' => ['resep.view-all']
+        ]
+    ])->assertStatus(401);
+});
+
+test('authenticated user can sync permissions with valid matrix payload', function () {
+    $user = User::factory()->create();
+    
+    $adminRole = Role::create([
+        'name' => 'admin',
+        'slug' => 'admin',
+        'guard_name' => 'web',
+    ]);
+    
+    $userRole = Role::create([
+        'name' => 'user',
+        'slug' => 'user',
+        'guard_name' => 'web',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->postJson(route('roles-permissions.sync'), [
+            'matrix' => [
+                'admin' => ['resep.view-all', 'resep.create'],
+                'user' => ['resep.view-all']
+            ]
+        ])
+        ->assertStatus(200);
+
+    expect($response['success'])->toBeTrue();
+    expect($response['message'])->toBe('Perubahan izin berhasil disimpan!');
+
+    // Assert database sync
+    expect($adminRole->fresh()->hasPermissionTo('resep.view-all'))->toBeTrue();
+    expect($adminRole->fresh()->hasPermissionTo('resep.create'))->toBeTrue();
+    expect($userRole->fresh()->hasPermissionTo('resep.view-all'))->toBeTrue();
+    expect($userRole->fresh()->hasPermissionTo('resep.create'))->toBeFalse();
+});
+
 
 

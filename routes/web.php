@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/roles-permissions-management/roles', [RolePermissionController::class, 'store'])->name('roles-permissions.store');
     Route::put('/roles-permissions-management/roles/{role}', [RolePermissionController::class, 'update'])->name('roles-permissions.update');
     Route::delete('/roles-permissions-management/roles/{role}', [RolePermissionController::class, 'destroy'])->name('roles-permissions.destroy');
+    Route::post('/roles-permissions-management/permissions', [RolePermissionController::class, 'syncPermissions'])->name('roles-permissions.sync');
 });
 
 require __DIR__.'/auth.php';

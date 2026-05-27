@@ -1,4 +1,31 @@
 <x-app-layout>
+    @php
+    if (!function_exists('hex2rgba')) {
+        function hex2rgba($color, $opacity = false) {
+            $default = 'rgb(0,0,0)';
+            if(empty($color)) return $default; 
+            if ($color[0] == '#' ) {
+                $color = substr( $color, 1 );
+            }
+            if (strlen($color) == 6) {
+                $hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
+            } elseif ( strlen( $color ) == 3 ) {
+                $hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
+            } else {
+                return $default;
+            }
+            $rgb =  array_map('hexdec', $hex);
+            if($opacity){
+                if(abs($opacity) > 1)
+                    $opacity = 1.0;
+                return 'rgba('.implode(",",$rgb).','.$opacity.')';
+            } else {
+                return 'rgb('.implode(",",$rgb).')';
+            }
+        }
+    }
+    @endphp
+
     @section('title', 'Peran & Akses')
     @section('page-title', 'Peran & Akses')
 
@@ -147,10 +174,11 @@
         <select class="d-md-none" id="roleFilter" onchange="filterByRole(this.value)"
           style="padding:.5rem .8rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.83rem;background:var(--bg);color:var(--text);outline:none">
           <option value="all">Tampilkan semua</option>
-          <option value="admin">Admin</option>
-          <option value="mod">Moderator</option>
-          <option value="author">Penulis</option>
-          <option value="member">Member</option>
+          @foreach($roles as $role)
+            @if($role->slug !== 'dev')
+              <option value="{{ $role->slug }}">{{ $role->name === 'user' ? 'Member' : $role->name }}</option>
+            @endif
+          @endforeach
         </select>
       </div>
 
@@ -159,327 +187,141 @@
           <thead>
             <tr>
               <th style="text-align:left">Izin / Permission</th>
-              <!-- Super Admin -->
-              <th>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem">
-                  <span class="role-th-pill" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.28);color:#b45309">
-                    👑 Super Admin
-                  </span>
-                  <span style="font-size:.65rem;color:var(--muted);font-weight:400">1 user</span>
-                </div>
-              </th>
-              <!-- Admin -->
-              <th data-col="admin">
-                <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem">
-                  <span class="role-th-pill" style="background:var(--primary-pale);border-color:var(--primary-border);color:var(--primary)">
-                    🛡️ Admin
-                  </span>
-                  <span style="font-size:.65rem;color:var(--muted);font-weight:400">3 users</span>
-                </div>
-              </th>
-              <!-- Moderator -->
-              <th data-col="mod">
-                <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem">
-                  <span class="role-th-pill" style="background:rgba(59,130,246,.09);border-color:rgba(59,130,246,.25);color:#1d4ed8">
-                    🔍 Moderator
-                  </span>
-                  <span style="font-size:.65rem;color:var(--muted);font-weight:400">7 users</span>
-                </div>
-              </th>
-              <!-- Penulis -->
-              <th data-col="author">
-                <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem">
-                  <span class="role-th-pill" style="background:rgba(34,197,94,.09);border-color:rgba(34,197,94,.25);color:#15803d">
-                    ✍️ Penulis
-                  </span>
-                  <span style="font-size:.65rem;color:var(--muted);font-weight:400">54 users</span>
-                </div>
-              </th>
-              <!-- Member -->
-              <th data-col="member">
-                <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem">
-                  <span class="role-th-pill" style="background:rgba(100,116,139,.09);border-color:rgba(100,116,139,.2);color:#475569">
-                    👤 Member
-                  </span>
-                  <span style="font-size:.65rem;color:var(--muted);font-weight:400">1.247 users</span>
-                </div>
-              </th>
+              @foreach($roles as $role)
+                @php
+                  $roleColor = $role->color ?? '#64748b';
+                  // Compute rgba ring (20% opacity) for CSS variable
+                  preg_match('/^#?([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i', ltrim($roleColor,'#'), $m);
+                  $r = isset($m[1]) ? hexdec($m[1]) : 100;
+                  $g = isset($m[2]) ? hexdec($m[2]) : 116;
+                  $b = isset($m[3]) ? hexdec($m[3]) : 139;
+                  $ringColor = "rgba($r,$g,$b,0.3)";
+                @endphp
+                <th data-col="{{ $role->slug }}" style="--cb-color:{{ $roleColor }};--cb-color-ring:{{ $ringColor }}">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem">
+                    <span class="role-th-pill" style="background:{{ hex2rgba($roleColor, 0.09) }};border-color:{{ hex2rgba($roleColor, 0.25) }};color:{{ $roleColor }}">
+                      {{ $role->icon ?? '👤' }} {{ $role->slug === 'dev' ? 'Super Admin' : ($role->slug === 'user' ? 'Member' : $role->name) }}
+                    </span>
+                    <span style="font-size:.65rem;color:var(--muted);font-weight:400">{{ number_format($role->users_count, 0, ',', '.') }} user{{ $role->users_count != 1 ? 's' : '' }}</span>
+                    
+                    @if($role->slug !== 'dev')
+                      <label class="select-all-wrap" style="--cb-color:{{ $roleColor }};--cb-color-ring:{{ $ringColor }}">
+                        <input type="checkbox" class="select-all-column" data-role="{{ $role->slug }}" title="Pilih Semua / Bersihkan" style="--cb-color:{{ $roleColor }};--cb-color-ring:{{ $ringColor }}" />
+                        <span class="select-all-label">Pilih Semua</span>
+                      </label>
+                    @endif
+                  </div>
+                </th>
+              @endforeach
             </tr>
           </thead>
           <tbody>
+            @php
+            $groups = [
+                '🍽️ Resep' => [
+                    'color' => '#e85d26',
+                    'permissions' => [
+                        ['label' => 'Lihat semua resep', 'slug' => 'resep.view-all'],
+                        ['label' => 'Tambah resep', 'slug' => 'resep.create'],
+                        ['label' => 'Edit resep sendiri', 'slug' => 'resep.edit-own'],
+                        ['label' => 'Edit semua resep', 'slug' => 'resep.edit-all'],
+                        ['label' => 'Hapus resep', 'slug' => 'resep.delete'],
+                        ['label' => 'Publish / Unpublish resep', 'slug' => 'resep.publish'],
+                        ['label' => 'Tandai unggulan', 'slug' => 'resep.feature'],
+                    ]
+                ],
+                '🔍 Moderasi' => [
+                    'color' => '#3b82f6',
+                    'permissions' => [
+                        ['label' => 'Lihat antrian moderasi', 'slug' => 'moderasi.view'],
+                        ['label' => 'Setujui resep', 'slug' => 'moderasi.approve'],
+                        ['label' => 'Tolak resep', 'slug' => 'moderasi.reject'],
+                        ['label' => 'Hapus komentar', 'slug' => 'komentar.delete'],
+                    ]
+                ],
+                '👥 Pengguna' => [
+                    'color' => '#22c55e',
+                    'permissions' => [
+                        ['label' => 'Lihat daftar pengguna', 'slug' => 'user.view'],
+                        ['label' => 'Edit pengguna', 'slug' => 'user.edit'],
+                        ['label' => 'Aktifkan / Nonaktifkan user', 'slug' => 'user.toggle-active'],
+                        ['label' => 'Ubah role pengguna', 'slug' => 'user.assign-role'],
+                        ['label' => 'Hapus pengguna', 'slug' => 'user.delete'],
+                    ]
+                ],
+                '📦 Master Data' => [
+                    'color' => '#f59e0b',
+                    'permissions' => [
+                        ['label' => 'Kelola kategori', 'slug' => 'kategori.manage'],
+                        ['label' => 'Kelola tags', 'slug' => 'tags.manage'],
+                        ['label' => 'Kelola bahan makanan', 'slug' => 'bahan.manage'],
+                    ]
+                ],
+                '📊 Analitik' => [
+                    'color' => '#a855f7',
+                    'permissions' => [
+                        ['label' => 'Lihat statistik', 'slug' => 'analitik.view'],
+                        ['label' => 'Export laporan', 'slug' => 'analitik.export'],
+                    ]
+                ],
+                '⚙️ Sistem' => [
+                    'color' => '#64748b',
+                    'permissions' => [
+                        ['label' => 'Pengaturan umum', 'slug' => 'sistem.settings'],
+                        ['label' => 'Kelola peran & akses', 'slug' => 'sistem.role-permission'],
+                        ['label' => 'Akses log sistem', 'slug' => 'sistem.logs'],
+                    ]
+                ],
+                '💬 Interaksi' => [
+                    'color' => '#ec4899',
+                    'permissions' => [
+                        ['label' => 'Tulis komentar', 'slug' => 'komentar.create'],
+                        ['label' => 'Beri rating resep', 'slug' => 'rating.create'],
+                        ['label' => 'Simpan resep ke koleksi', 'slug' => 'koleksi.save'],
+                    ]
+                ]
+            ];
+            @endphp
 
-            <!-- ── RESEP ── -->
-            <tr class="group-row">
-              <td colspan="6">
-                <span class="group-dot" style="background:#e85d26"></span>
-                🍽️ Resep
-              </td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Lihat semua resep</span><span class="perm-slug">resep.view-all</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   data-perm="resep.view-all"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     data-perm="resep.view-all"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  data-perm="resep.view-all"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  data-perm="resep.view-all"   checked onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Tambah resep</span><span class="perm-slug">resep.create</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   data-perm="resep.create"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     data-perm="resep.create"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  data-perm="resep.create"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  data-perm="resep.create"            onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Edit resep sendiri</span><span class="perm-slug">resep.edit-own</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   data-perm="resep.edit-own"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     data-perm="resep.edit-own"          onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  data-perm="resep.edit-own"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  data-perm="resep.edit-own"          onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Edit semua resep</span><span class="perm-slug">resep.edit-all</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   data-perm="resep.edit-all"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     data-perm="resep.edit-all"          onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"          data-perm="resep.edit-all"          onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  data-perm="resep.edit-all"          onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Hapus resep</span><span class="perm-slug">resep.delete</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   data-perm="resep.delete"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     data-perm="resep.delete"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  data-perm="resep.delete"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  data-perm="resep.delete"            onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Publish / Unpublish resep</span><span class="perm-slug">resep.publish</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   data-perm="resep.publish"    checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     data-perm="resep.publish"    checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  data-perm="resep.publish"           onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  data-perm="resep.publish"           onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Tandai unggulan</span><span class="perm-slug">resep.feature</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   data-perm="resep.feature"    checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     data-perm="resep.feature"           onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  data-perm="resep.feature"           onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  data-perm="resep.feature"           onchange="onPermChange()"/></td>
-            </tr>
-
-            <!-- ── MODERASI ── -->
-            <tr class="group-row">
-              <td colspan="6">
-                <span class="group-dot" style="background:#3b82f6"></span>
-                🔍 Moderasi
-              </td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Lihat antrian moderasi</span><span class="perm-slug">moderasi.view</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Setujui resep</span><span class="perm-slug">moderasi.approve</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Tolak resep</span><span class="perm-slug">moderasi.reject</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Hapus komentar</span><span class="perm-slug">komentar.delete</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-
-            <!-- ── PENGGUNA ── -->
-            <tr class="group-row">
-              <td colspan="6">
-                <span class="group-dot" style="background:#22c55e"></span>
-                👥 Pengguna
-              </td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Lihat daftar pengguna</span><span class="perm-slug">user.view</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Edit pengguna</span><span class="perm-slug">user.edit</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Aktifkan / Nonaktifkan user</span><span class="perm-slug">user.toggle-active</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Ubah role pengguna</span><span class="perm-slug">user.assign-role</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Hapus pengguna</span><span class="perm-slug">user.delete</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-
-            <!-- ── MASTER DATA ── -->
-            <tr class="group-row">
-              <td colspan="6">
-                <span class="group-dot" style="background:#f59e0b"></span>
-                📦 Master Data
-              </td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Kelola kategori</span><span class="perm-slug">kategori.manage</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Kelola tags</span><span class="perm-slug">tags.manage</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Kelola bahan makanan</span><span class="perm-slug">bahan.manage</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-
-            <!-- ── ANALITIK ── -->
-            <tr class="group-row">
-              <td colspan="6">
-                <span class="group-dot" style="background:#a855f7"></span>
-                📊 Analitik
-              </td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Lihat statistik</span><span class="perm-slug">analitik.view</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Export laporan</span><span class="perm-slug">analitik.export</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-
-            <!-- ── SISTEM ── -->
-            <tr class="group-row">
-              <td colspan="6">
-                <span class="group-dot" style="background:#64748b"></span>
-                ⚙️ Sistem
-              </td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Pengaturan umum</span><span class="perm-slug">sistem.settings</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Kelola peran &amp; akses</span><span class="perm-slug">sistem.role-permission</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Akses log sistem</span><span class="perm-slug">sistem.logs</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"            onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"         onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"         onchange="onPermChange()"/></td>
-            </tr>
-
-            <!-- ── INTERAKSI ── -->
-            <tr class="group-row">
-              <td colspan="6">
-                <span class="group-dot" style="background:#ec4899"></span>
-                💬 Interaksi
-              </td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Tulis komentar</span><span class="perm-slug">komentar.create</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  checked onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Beri rating resep</span><span class="perm-slug">rating.create</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  checked onchange="onPermChange()"/></td>
-            </tr>
-            <tr class="perm-row">
-              <td><span class="perm-label">Simpan resep ke koleksi</span><span class="perm-slug">koleksi.save</span></td>
-              <td><i class="bi bi-lock-fill perm-lock"></i></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="admin"   checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="mod"     checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="author"  checked onchange="onPermChange()"/></td>
-              <td><input type="checkbox" class="perm-toggle" data-role="member"  checked onchange="onPermChange()"/></td>
-            </tr>
-
+            @foreach($groups as $groupName => $groupInfo)
+              <tr class="group-row">
+                <td colspan="{{ $roles->count() + 1 }}">
+                  <span class="group-dot" style="background:{{ $groupInfo['color'] }}"></span>
+                  {{ $groupName }}
+                </td>
+              </tr>
+              @foreach($groupInfo['permissions'] as $perm)
+                <tr class="perm-row">
+                  <td>
+                    <span class="perm-label">{{ $perm['label'] }}</span>
+                    <span class="perm-slug">{{ $perm['slug'] }}</span>
+                  </td>
+                  @foreach($roles as $role)
+                    @php
+                      $roleColor = $role->color ?? '#64748b';
+                      preg_match('/^#?([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i', ltrim($roleColor,'#'), $m2);
+                      $r2 = isset($m2[1]) ? hexdec($m2[1]) : 100;
+                      $g2 = isset($m2[2]) ? hexdec($m2[2]) : 116;
+                      $b2 = isset($m2[3]) ? hexdec($m2[3]) : 139;
+                      $ringColor2 = "rgba($r2,$g2,$b2,0.3)";
+                    @endphp
+                    <td>
+                      @if($role->slug === 'dev')
+                        <i class="bi bi-lock-fill perm-lock"></i>
+                      @else
+                        <input type="checkbox" 
+                               class="perm-toggle" 
+                               data-role="{{ $role->slug }}"   
+                               data-perm="{{ $perm['slug'] }}"
+                               style="--cb-color:{{ $roleColor }};--cb-color-ring:{{ $ringColor2 }}"
+                               {{ $role->permissions->contains('name', $perm['slug']) ? 'checked' : '' }} 
+                               onchange="onPermChange()"/>
+                      @endif
+                    </td>
+                  @endforeach
+                </tr>
+              @endforeach
+            @endforeach
           </tbody>
         </table>
       </div><!-- /matrix-scroll -->

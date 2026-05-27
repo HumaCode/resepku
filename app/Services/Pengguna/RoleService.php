@@ -57,4 +57,21 @@ class RoleService
     {
         return $this->roleRepository->deleteRole($role);
     }
+
+    /**
+     * Sync permissions for a role.
+     *
+     * @param string $roleSlug
+     * @param array $permissionNames
+     * @return void
+     */
+    public function syncPermissionsForRole(string $roleSlug, array $permissionNames): void
+    {
+        // Map member to user role
+        if ($roleSlug === 'member') {
+            $roleSlug = 'user';
+        }
+
+        $this->roleRepository->syncPermissionsForRole($roleSlug, $permissionNames);
+    }
 }

@@ -37,4 +37,13 @@ interface RoleRepositoryInterface
      * @return bool|null
      */
     public function deleteRole($role);
+
+    /**
+     * Sync permissions for a specific role by its slug.
+     *
+     * @param string $roleSlug
+     * @param array $permissionNames
+     * @return void
+     */
+    public function syncPermissionsForRole(string $roleSlug, array $permissionNames): void;
 }

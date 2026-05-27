@@ -8,6 +8,7 @@ use App\Http\Resources\Pengguna\RoleResource;
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\Pengguna\StoreRoleRequest;
 use App\Http\Requests\Pengguna\UpdateRoleRequest;
+use App\Http\Requests\Pengguna\SyncPermissionsRequest;
 use App\Models\Role;
 use Illuminate\Http\JsonResponse;
 
@@ -25,7 +26,19 @@ class RolePermissionController extends Controller
      */
     public function index()
     {
-        return view('pages.pengguna.role-permission.index');
+        $roles = \App\Models\Role::where('is_active', '1')
+            ->with('permissions')
+            ->withCount('users')
+            ->get();
+
+        $roles = $roles->sortBy(function ($role) {
+            if ($role->slug === 'dev') return 1;
+            if ($role->slug === 'admin') return 2;
+            if ($role->slug === 'user') return 99;
+            return 10;
+        });
+
+        return view('pages.pengguna.role-permission.index', compact('roles'));
     }
 
     /**
@@ -93,5 +106,25 @@ class RolePermissionController extends Controller
         $this->roleService->deleteRole($role);
 
         return ResponseHelper::jsonResponse(true, 'Role berhasil dihapus', null, 200);
+    }
+
+    /**
+     * Sync permissions for roles.
+     *
+     * @param SyncPermissionsRequest $request
+     * @return JsonResponse
+     */
+    public function syncPermissions(SyncPermissionsRequest $request): JsonResponse
+    {
+        $matrix = $request->input('matrix', []);
+
+        foreach ($matrix as $roleSlug => $permissions) {
+            $this->roleService->syncPermissionsForRole($roleSlug, $permissions);
+        }
+
+        // Clear Spatie Permission cache to reflect changes
+        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+        return ResponseHelper::jsonResponse(true, 'Perubahan izin berhasil disimpan!', null, 200);
     }
 }

@@ -385,9 +385,54 @@ document.addEventListener('DOMContentLoaded', () => {
   let changeCount = 0;
   const origState = {};
 
+  /* Helper to sync select-all column headers */
+  function updateSelectAllHeaders() {
+    document.querySelectorAll('.select-all-column').forEach(sa => {
+      const role = sa.getAttribute('data-role');
+      const toggles = document.querySelectorAll(`.perm-toggle[data-role="${role}"]`);
+      const checked = document.querySelectorAll(`.perm-toggle[data-role="${role}"]:checked`);
+      sa.checked = (toggles.length > 0 && toggles.length === checked.length);
+    });
+  }
+
   /* Snapshot initial state */
   document.querySelectorAll('.perm-toggle').forEach((cb, i) => {
     origState[i] = cb.checked;
+  });
+
+  updateSelectAllHeaders();
+
+  /* Re-trigger CSS animation on a checkbox (needed for subsequent toggles) */
+  function triggerCheckAnim(cb) {
+    if (!cb.checked) return;
+    cb.style.animation = 'none';
+    // Force reflow
+    void cb.offsetWidth;
+    cb.style.animation = '';
+  }
+
+  /* Listen to header select-all clicks */
+  $(document).on('change', '.select-all-column', function() {
+    const role = $(this).attr('data-role');
+    const checked = $(this).is(':checked');
+    const toggles = document.querySelectorAll(`.perm-toggle[data-role="${role}"]`);
+    
+    toggles.forEach((cb) => {
+      const wasChecked = cb.checked;
+      cb.checked = checked;
+      if (checked && !wasChecked) {
+        triggerCheckAnim(cb);
+      }
+    });
+
+    if (window.onPermChange) {
+      window.onPermChange();
+    }
+  });
+
+  /* Re-trigger pulse animation on individual perm-toggle change */
+  $(document).on('change', '.perm-toggle', function() {
+    triggerCheckAnim(this);
   });
 
   window.onPermChange = function() {
@@ -401,6 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
       badge.innerHTML = `<i class="bi bi-pencil-fill"></i> ${diff} perubahan`;
       badge.style.display = diff > 0 ? '' : 'none';
     }
+    updateSelectAllHeaders();
   }
 
   window.savePermissions = function() {
@@ -410,21 +456,57 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" style="width:14px;height:14px"></span> Menyimpan...';
     btn.disabled  = true;
 
-    setTimeout(() => {
-      /* Commit state */
-      document.querySelectorAll('.perm-toggle').forEach((cb, i) => {
-        origState[i] = cb.checked;
-      });
-      changeCount = 0;
-      const badge = document.getElementById('changeCount');
-      if (badge) {
-        badge.innerHTML = '<i class="bi bi-pencil-fill"></i> 0 perubahan';
-        badge.style.display = 'none';
+    const matrix = {};
+    document.querySelectorAll('.perm-toggle').forEach(cb => {
+      const role = cb.getAttribute('data-role');
+      const perm = cb.getAttribute('data-perm');
+      if (role && perm) {
+        if (!matrix[role]) {
+          matrix[role] = [];
+        }
+        if (cb.checked) {
+          matrix[role].push(perm);
+        }
       }
-      btn.innerHTML = orig;
-      btn.disabled  = false;
-      window.showToast('Perubahan izin berhasil disimpan!', 'success');
-    }, 1400);
+    });
+
+    $.ajax({
+      url: '/roles-permissions-management/permissions',
+      method: 'POST',
+      contentType: 'application/json',
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      data: JSON.stringify({
+        matrix: matrix
+      }),
+      dataType: 'json',
+      success: function(response) {
+        /* Commit state */
+        document.querySelectorAll('.perm-toggle').forEach((cb, i) => {
+          origState[i] = cb.checked;
+        });
+        changeCount = 0;
+        const badge = document.getElementById('changeCount');
+        if (badge) {
+          badge.innerHTML = '<i class="bi bi-pencil-fill"></i> 0 perubahan';
+          badge.style.display = 'none';
+        }
+        btn.innerHTML = orig;
+        btn.disabled  = false;
+        updateSelectAllHeaders();
+        window.showToast(response.message || 'Perubahan izin berhasil disimpan!', 'success');
+      },
+      error: function(xhr) {
+        btn.innerHTML = orig;
+        btn.disabled  = false;
+        let errorMsg = 'Terjadi kesalahan sistem, silakan coba lagi.';
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          errorMsg = xhr.responseJSON.message;
+        }
+        window.showToast(errorMsg, 'danger');
+      }
+    });
   }
 
   window.resetPermissions = function() {
@@ -437,6 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
       badge.innerHTML = '<i class="bi bi-pencil-fill"></i> 0 perubahan';
       badge.style.display = 'none';
     }
+    updateSelectAllHeaders();
     window.showToast('Permission direset ke kondisi terakhir', 'info');
   }
 
