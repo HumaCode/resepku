@@ -39,14 +39,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!$grid.length) return;
     const $addCard = $grid.find('.role-add-card').detach();
     $grid.empty();
-    $grid.append('<div class="loading-state text-center w-100 py-5"><span class="spinner-border spinner-border-sm text-primary"></span> Memuat data peran...</div>');
+    
+    const skeletonHtml = `
+      <div class="role-card skeleton-card">
+        <div class="role-card-top">
+          <div class="skeleton-icon-circle skeleton-shimmer"></div>
+          <div class="role-card-actions">
+            <div class="skeleton-action-btn skeleton-shimmer"></div>
+          </div>
+        </div>
+        <div class="skeleton-text skeleton-title skeleton-shimmer"></div>
+        <div class="skeleton-text skeleton-desc-line-1 skeleton-shimmer"></div>
+        <div class="skeleton-text skeleton-desc-line-2 skeleton-shimmer"></div>
+        <div class="role-meta" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%">
+          <div class="skeleton-text skeleton-meta-1 skeleton-shimmer"></div>
+          <div class="skeleton-text skeleton-meta-2 skeleton-shimmer"></div>
+        </div>
+      </div>
+    `;
+
+    for (let i = 0; i < 3; i++) {
+      $grid.append(skeletonHtml);
+    }
 
     $.ajax({
       url: '/roles-permissions-management/roles',
       method: 'GET',
       dataType: 'json',
       success: function(response) {
-        $grid.find('.loading-state').remove();
+        $grid.find('.skeleton-card').remove();
         if (response.success && response.data) {
           loadedRolesCache = response.data;
           response.data.forEach(role => {
@@ -82,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $grid.append($addCard);
       },
       error: function(xhr, status, error) {
-        $grid.find('.loading-state').remove();
+        $grid.find('.skeleton-card').remove();
         window.showToast('Gagal memuat data peran: ' + error, 'danger');
         $grid.append($addCard);
       }

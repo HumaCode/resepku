@@ -493,4 +493,64 @@
 .role-teal::before    { background: linear-gradient(90deg,#0d9488,#0f766e); }
 .role-teal .role-perm-count { background: rgba(13,148,136,.1); color: #0f766e; border: 1px solid rgba(13,148,136,.25); }
 
+/* Skeleton Loader Styles */
+.skeleton-card {
+  pointer-events: none !important;
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+.skeleton-card::before {
+  display: none !important;
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f5efe6 25%, #ebdcc9 50%, #f5efe6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+.skeleton-action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+.skeleton-text {
+  border-radius: 4px;
+}
+.skeleton-title {
+  width: 55%;
+  height: 1.2rem;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+}
+.skeleton-desc-line-1 {
+  width: 90%;
+  height: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+.skeleton-desc-line-2 {
+  width: 70%;
+  height: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.skeleton-meta-1 {
+  width: 35%;
+  height: 0.75rem;
+  display: inline-block;
+}
+.skeleton-meta-2 {
+  width: 30%;
+  height: 1.2rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
 

@@ -51,87 +51,52 @@
     <!-- ══ ROLE CARDS ══ -->
     <div class="role-grid" id="roleGrid" data-aos="fade-up" data-aos-delay="60">
 
-      <!-- Super Admin -->
-      <div class="role-card role-super" onclick="highlightRole('super', event)">
+      <!-- Skeleton loader (rendered initially by server and replaced by JS) -->
+      <div class="role-card skeleton-card">
         <div class="role-card-top">
-          <div class="role-icon">👑</div>
+          <div class="skeleton-icon-circle skeleton-shimmer"></div>
           <div class="role-card-actions">
-            <button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('Super Admin')"><i class="bi bi-pencil"></i></button>
+            <div class="skeleton-action-btn skeleton-shimmer"></div>
           </div>
         </div>
-        <div class="role-name">Super Admin</div>
-        <div class="role-desc">Akses penuh ke seluruh sistem. Tidak dapat dihapus atau dibatasi.</div>
-        <div class="role-meta">
-          <span class="role-user-count"><i class="bi bi-people-fill"></i> 1 pengguna</span>
-          <span class="role-perm-count">Semua Akses</span>
+        <div class="skeleton-text skeleton-title skeleton-shimmer"></div>
+        <div class="skeleton-text skeleton-desc-line-1 skeleton-shimmer"></div>
+        <div class="skeleton-text skeleton-desc-line-2 skeleton-shimmer"></div>
+        <div class="role-meta" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%">
+          <div class="skeleton-text skeleton-meta-1 skeleton-shimmer"></div>
+          <div class="skeleton-text skeleton-meta-2 skeleton-shimmer"></div>
+        </div>
+      </div>
+      
+      <div class="role-card skeleton-card">
+        <div class="role-card-top">
+          <div class="skeleton-icon-circle skeleton-shimmer"></div>
+          <div class="role-card-actions">
+            <div class="skeleton-action-btn skeleton-shimmer"></div>
+          </div>
+        </div>
+        <div class="skeleton-text skeleton-title skeleton-shimmer"></div>
+        <div class="skeleton-text skeleton-desc-line-1 skeleton-shimmer"></div>
+        <div class="skeleton-text skeleton-desc-line-2 skeleton-shimmer"></div>
+        <div class="role-meta" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%">
+          <div class="skeleton-text skeleton-meta-1 skeleton-shimmer"></div>
+          <div class="skeleton-text skeleton-meta-2 skeleton-shimmer"></div>
         </div>
       </div>
 
-      <!-- Admin -->
-      <div class="role-card role-admin" onclick="highlightRole('admin', event)">
+      <div class="role-card skeleton-card">
         <div class="role-card-top">
-          <div class="role-icon">🛡️</div>
+          <div class="skeleton-icon-circle skeleton-shimmer"></div>
           <div class="role-card-actions">
-            <button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('Admin')"><i class="bi bi-pencil"></i></button>
-            <button class="rc-btn del"  title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('Admin')"><i class="bi bi-trash"></i></button>
+            <div class="skeleton-action-btn skeleton-shimmer"></div>
           </div>
         </div>
-        <div class="role-name">Admin</div>
-        <div class="role-desc">Mengelola konten, pengguna, dan pengaturan platform secara keseluruhan.</div>
-        <div class="role-meta">
-          <span class="role-user-count"><i class="bi bi-people-fill"></i> 3 pengguna</span>
-          <span class="role-perm-count">38 izin</span>
-        </div>
-      </div>
-
-      <!-- Moderator -->
-      <div class="role-card role-mod" onclick="highlightRole('mod', event)">
-        <div class="role-card-top">
-          <div class="role-icon">🔍</div>
-          <div class="role-card-actions">
-            <button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('Moderator')"><i class="bi bi-pencil"></i></button>
-            <button class="rc-btn del"  title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('Moderator')"><i class="bi bi-trash"></i></button>
-          </div>
-        </div>
-        <div class="role-name">Moderator</div>
-        <div class="role-desc">Moderasi resep dan komentar yang masuk dari pengguna platform.</div>
-        <div class="role-meta">
-          <span class="role-user-count"><i class="bi bi-people-fill"></i> 7 pengguna</span>
-          <span class="role-perm-count">22 izin</span>
-        </div>
-      </div>
-
-      <!-- Penulis -->
-      <div class="role-card role-author" onclick="highlightRole('author', event)">
-        <div class="role-card-top">
-          <div class="role-icon">✍️</div>
-          <div class="role-card-actions">
-            <button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('Penulis')"><i class="bi bi-pencil"></i></button>
-            <button class="rc-btn del"  title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('Penulis')"><i class="bi bi-trash"></i></button>
-          </div>
-        </div>
-        <div class="role-name">Penulis</div>
-        <div class="role-desc">Membuat dan mengelola resep milik sendiri, tidak bisa edit resep orang lain.</div>
-        <div class="role-meta">
-          <span class="role-user-count"><i class="bi bi-people-fill"></i> 54 pengguna</span>
-          <span class="role-perm-count">12 izin</span>
-        </div>
-      </div>
-
-      <!-- Member -->
-      <div class="role-card role-member" onclick="highlightRole('member', event)">
-        <div class="role-card-top">
-          <div class="role-icon">👤</div>
-          <div class="role-card-actions">
-            <button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('Member')"><i class="bi bi-pencil"></i></button>
-            <button class="rc-btn del"  title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('Member')"><i class="bi bi-trash"></i></button>
-          </div>
-        </div>
-        <div class="role-name">Member</div>
-        <div class="role-desc">Pengguna terdaftar biasa. Dapat menyimpan, memberi rating, dan berkomentar.</div>
-        <div class="role-meta">
-          <span class="role-user-count"><i class="bi bi-people-fill"></i> 1.247 pengguna</span>
-          <span class="role-perm-count">5 izin</span>
+        <div class="skeleton-text skeleton-title skeleton-shimmer"></div>
+        <div class="skeleton-text skeleton-desc-line-1 skeleton-shimmer"></div>
+        <div class="skeleton-text skeleton-desc-line-2 skeleton-shimmer"></div>
+        <div class="role-meta" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%">
+          <div class="skeleton-text skeleton-meta-1 skeleton-shimmer"></div>
+          <div class="skeleton-text skeleton-meta-2 skeleton-shimmer"></div>
         </div>
       </div>
 
