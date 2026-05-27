@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   let loadedRolesCache = [];
-  let isInitialLoad = true;
 
   /* ════════════════════════════════════════════
      AJAX ROLE DATA LOADING
@@ -66,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $.ajax({
       url: '/roles-permissions-management/roles',
       method: 'GET',
+      cache: false,
       dataType: 'json',
       success: function(response) {
         $grid.find('.skeleton-card').remove();
@@ -112,25 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
         $grid.append($addCard);
-        if (isInitialLoad) {
-          isInitialLoad = false;
-        } else {
-          if (window.loadMatrixTable) {
-            window.loadMatrixTable();
-          }
-        }
       },
       error: function(xhr, status, error) {
         $grid.find('.skeleton-card').remove();
         window.showToast('Gagal memuat data peran: ' + error, 'danger');
         $grid.append($addCard);
-        if (isInitialLoad) {
-          isInitialLoad = false;
-        } else {
-          if (window.loadMatrixTable) {
-            window.loadMatrixTable();
-          }
-        }
       }
     });
   }
@@ -336,8 +322,11 @@ document.addEventListener('DOMContentLoaded', () => {
           position: 'bottom-center'
         });
         
-        // Reload role cards
+        // Reload role cards and matrix table
         loadRoles();
+        if (window.loadMatrixTable) {
+          window.loadMatrixTable();
+        }
       },
       error: function(xhr) {
         // Reset buttons
@@ -405,6 +394,9 @@ document.addEventListener('DOMContentLoaded', () => {
               position: 'bottom-center'
             });
             loadRoles();
+            if (window.loadMatrixTable) {
+              window.loadMatrixTable();
+            }
           },
           error: function(xhr) {
             PA.closeAll();
@@ -439,6 +431,9 @@ document.addEventListener('DOMContentLoaded', () => {
         PA.closeAll();
         window.showToast(response.message || 'Status peran berhasil diubah', 'success');
         loadRoles();
+        if (window.loadMatrixTable) {
+          window.loadMatrixTable();
+        }
       },
       error: function(xhr) {
         PA.closeAll();
@@ -490,6 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $.ajax({
       url: '/roles-permissions-management',
       method: 'GET',
+      cache: false,
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       },
