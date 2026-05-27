@@ -38,21 +38,15 @@
     @endpush
 
     <!-- Breadcrumb -->
-    <div class="breadcrumb-bar" data-aos="fade-down" data-aos-duration="600">
-      <div class="bc-left">
-        <div class="bc-title">
-          <div class="bc-icon"><i class="bi bi-person-badge"></i></div>
-          Peran &amp; Akses
-        </div>
-        <div class="bc-desc">Kelola peran pengguna dan atur hak akses per modul secara granular.</div>
-      </div>
-      <div class="bc-right">
-        <i class="bi bi-house-fill" style="color:var(--warning)"></i>
-        <a href="{{ route('dashboard') }}">Home</a>
-        <i class="bi bi-chevron-right" style="color:var(--border)"></i>
-        <span style="color:var(--primary);font-weight:600">Peran &amp; Akses</span>
-      </div>
-    </div>
+    <x-breadcrumb-bar 
+        title="Peran & Akses"
+        icon="bi-person-badge"
+        desc="Kelola peran pengguna dan atur hak akses per modul secara granular."
+        :items="[
+            'Home' => route('dashboard'),
+            'Peran & Akses' => null
+        ]"
+    />
 
     <!-- ══ ROLE CARDS ══ -->
     <div class="role-grid" id="roleGrid" data-aos="fade-up" data-aos-delay="60">

@@ -11,21 +11,15 @@
     @endpush
 
     <!-- Breadcrumb -->
-    <div class="breadcrumb-bar" data-aos="fade-down" data-aos-duration="600">
-        <div class="bc-left">
-            <div class="bc-title">
-                <i class="bi bi-grid-1x2"></i>
-                Dashboard
-            </div>
-            <div class="bc-desc">Selamat datang kembali! Berikut ringkasan aktivitas hari ini.</div>
-        </div>
-        <div class="bc-right">
-            <i class="bi bi-house-fill text-warning"></i>
-            <a href="#">Home</a>
-            <i class="bi bi-chevron-right bc-sep"></i>
-            <span style="color:var(--primary); font-weight:600">Dashboard</span>
-        </div>
-    </div>
+    <x-breadcrumb-bar 
+        title="Dashboard"
+        icon="bi-grid-1x2"
+        desc="Selamat datang kembali! Berikut ringkasan aktivitas hari ini."
+        :items="[
+            'Home' => '#',
+            'Dashboard' => null
+        ]"
+    />
 
     <!-- Welcome Banner -->
     <div class="welcome-banner" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
