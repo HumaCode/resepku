@@ -14,7 +14,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
     <!-- Vite Assets -->
-    @vite(['resources/css/backend/global.css', 'resources/js/backend/global.js'])
+    @vite([
+        'resources/css/backend/global.css',
+        'resources/css/backend/resepkita-alert.css',
+        'resources/js/backend/global.js',
+        'resources/js/backend/resepkita-alert.js'
+    ])
     @stack('styles')
 </head>
 <body>
