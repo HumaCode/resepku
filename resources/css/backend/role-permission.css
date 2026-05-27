@@ -243,6 +243,33 @@
 /* ═══════════════════════════════════════════
    MODAL — Tambah / Edit Role
 ═══════════════════════════════════════════ */
+.modal-custom.fade .modal-dialog {
+  transform-origin: top center;
+  transform: scale(0.15, 0.03) translateY(-250px);
+  border-radius: 200px !important;
+  opacity: 0;
+  overflow: hidden;
+  transition: transform 0.75s cubic-bezier(0.19, 1, 0.22, 1), 
+              border-radius 0.75s cubic-bezier(0.19, 1, 0.22, 1), 
+              opacity 0.4s ease-out;
+}
+.modal-custom.show .modal-dialog {
+  transform: scale(1) translateY(0);
+  border-radius: var(--radius, 16px) !important;
+  opacity: 1;
+}
+.modal-custom .modal-content {
+  background: var(--surface);
+  border: none;
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease-out 0.2s;
+}
+.modal-custom.show .modal-content {
+  opacity: 1;
+}
+
 .modal-header-custom {
   padding: 1.25rem 1.5rem .75rem;
   border-bottom: 1px solid var(--border);
