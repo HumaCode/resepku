@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::get('/roles-permissions-management', [RolePermissionController::class, 'index'])->name('roles-permissions.index');
+    Route::get('/roles-permissions-management/roles', [RolePermissionController::class, 'getRoles'])->name('roles-permissions.roles');
 });
 
 require __DIR__.'/auth.php';

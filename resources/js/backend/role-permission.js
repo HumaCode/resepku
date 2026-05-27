@@ -1,5 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
   /* ════════════════════════════════════════════
+     AJAX ROLE DATA LOADING
+     ════════════════════════════════════════════ */
+  function getRoleConfig(slug) {
+    switch (slug) {
+      case 'dev':
+        return { title: 'Super Admin', class: 'role-super', icon: '👑' };
+      case 'admin':
+        return { title: 'Admin', class: 'role-admin', icon: '🛡️' };
+      case 'user':
+        return { title: 'Member', class: 'role-member', icon: '👤' };
+      default:
+        return { title: slug.charAt(0).toUpperCase() + slug.slice(1), class: 'role-member', icon: '👤' };
+    }
+  }
+
+  function loadRoles() {
+    const $grid = $('#roleGrid');
+    if (!$grid.length) return;
+    const $addCard = $grid.find('.role-add-card').detach();
+    $grid.empty();
+    $grid.append('<div class="loading-state text-center w-100 py-5"><span class="spinner-border spinner-border-sm text-primary"></span> Memuat data peran...</div>');
+
+    $.ajax({
+      url: '/roles-permissions-management/roles',
+      method: 'GET',
+      dataType: 'json',
+      success: function(response) {
+        $grid.find('.loading-state').remove();
+        if (response.success && response.data) {
+          response.data.forEach(role => {
+            const config = getRoleConfig(role.slug);
+            const isDev = role.slug === 'dev';
+            const userCountStr = Number(role.users_count).toLocaleString('id-ID');
+            const permCountStr = isDev ? 'Semua Akses' : `${role.permissions_count} izin`;
+
+            let actionsHtml = `<button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('${role.name}')"><i class="bi bi-pencil"></i></button>`;
+            if (!isDev) {
+              actionsHtml += `<button class="rc-btn del" title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('${role.name}')"><i class="bi bi-trash"></i></button>`;
+            }
+
+            const cardHtml = `
+              <div class="role-card ${config.class}" onclick="highlightRole('${role.slug}', event)">
+                <div class="role-card-top">
+                  <div class="role-icon">${config.icon}</div>
+                  <div class="role-card-actions">
+                    ${actionsHtml}
+                  </div>
+                </div>
+                <div class="role-name">${config.title}</div>
+                <div class="role-desc">${role.description || ''}</div>
+                <div class="role-meta">
+                  <span class="role-user-count"><i class="bi bi-people-fill"></i> ${userCountStr} pengguna</span>
+                  <span class="role-perm-count">${permCountStr}</span>
+                </div>
+              </div>
+            `;
+            $grid.append(cardHtml);
+          });
+        }
+        $grid.append($addCard);
+      },
+      error: function(xhr, status, error) {
+        $grid.find('.loading-state').remove();
+        window.showToast('Gagal memuat data peran: ' + error, 'danger');
+        $grid.append($addCard);
+      }
+    });
+  }
+
+  loadRoles();
+  /* ════════════════════════════════════════════
      ROLE CARDS
   ════════════════════════════════════════════ */
   window.highlightRole = function(role, event) {
@@ -60,14 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
     el.classList.add('sel');
   }
 
-  /* Icon picker */
   window.pickIcon = function(el) {
-    document.querySelectorAll('.icon-opt').forEach(o => {
-      o.style.borderColor = 'var(--border)';
-      o.style.background  = 'transparent';
-    });
-    el.style.borderColor = 'var(--primary-border)';
-    el.style.background  = 'var(--primary-pale)';
+    document.querySelectorAll('.icon-opt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
   }
 
   window.saveRole = function() {

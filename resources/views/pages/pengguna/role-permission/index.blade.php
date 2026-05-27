@@ -28,7 +28,7 @@
     </div>
 
     <!-- ══ ROLE CARDS ══ -->
-    <div class="role-grid" data-aos="fade-up" data-aos-delay="60">
+    <div class="role-grid" id="roleGrid" data-aos="fade-up" data-aos-delay="60">
 
       <!-- Super Admin -->
       <div class="role-card role-super" onclick="highlightRole('super', event)">
@@ -490,7 +490,7 @@
 
     <!-- ══ MODAL TAMBAH / EDIT ROLE ══ -->
     <div class="modal fade modal-custom" id="modalRole" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered" style="max-width:480px">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header-custom">
             <div class="modal-header-icon" id="modalRoleIcon"><i class="bi bi-person-badge"></i></div>
@@ -501,52 +501,74 @@
             <button class="modal-close" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></button>
           </div>
           <div class="modal-body-custom">
+            <div class="row g-4">
+              <!-- Left Column: Details -->
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label-m">Nama Role <span class="req">*</span></label>
+                  <input type="text" class="form-input-m" id="roleNameInput" placeholder="cth: Editor, Reviewer..."/>
+                  <div class="form-hint-m">Gunakan nama yang jelas dan mudah dipahami</div>
+                </div>
 
-            <div class="mb-3">
-              <label class="form-label-m">Nama Role <span class="req">*</span></label>
-              <input type="text" class="form-input-m" id="roleNameInput" placeholder="cth: Editor, Reviewer..."/>
-              <div class="form-hint-m">Gunakan nama yang jelas dan mudah dipahami</div>
-            </div>
+                <div class="mb-3">
+                  <label class="form-label-m">Slug (kode sistem)</label>
+                  <input type="text" class="form-input-m" id="roleSlugInput" placeholder="editor" style="font-family:monospace"/>
+                  <div class="form-hint-m">Lowercase, tanpa spasi. Diisi otomatis dari nama.</div>
+                </div>
 
-            <div class="mb-3">
-              <label class="form-label-m">Slug (kode sistem)</label>
-              <input type="text" class="form-input-m" id="roleSlugInput" placeholder="editor" style="font-family:monospace"/>
-              <div class="form-hint-m">Lowercase, tanpa spasi. Diisi otomatis dari nama.</div>
-            </div>
+                <div class="mb-0">
+                  <label class="form-label-m">Deskripsi</label>
+                  <textarea class="form-input-m" rows="4" id="roleDescInput" placeholder="Jelaskan tugas dan tanggung jawab role ini..." style="resize:none"></textarea>
+                </div>
+              </div>
 
-            <div class="mb-3">
-              <label class="form-label-m">Deskripsi</label>
-              <textarea class="form-input-m" rows="2" id="roleDescInput" placeholder="Jelaskan tugas dan tanggung jawab role ini..." style="resize:none"></textarea>
-            </div>
+              <!-- Right Column: Visuals -->
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label-m">Warna / Tema</label>
+                  <div class="color-picker-wrap">
+                    <div class="color-swatch sel" data-color="#e85d26" style="background:#e85d26" onclick="pickColor(this)"></div>
+                    <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b" onclick="pickColor(this)"></div>
+                    <div class="color-swatch" data-color="#22c55e" style="background:#22c55e" onclick="pickColor(this)"></div>
+                    <div class="color-swatch" data-color="#3b82f6" style="background:#3b82f6" onclick="pickColor(this)"></div>
+                    <div class="color-swatch" data-color="#a855f7" style="background:#a855f7" onclick="pickColor(this)"></div>
+                    <div class="color-swatch" data-color="#ec4899" style="background:#ec4899" onclick="pickColor(this)"></div>
+                    <div class="color-swatch" data-color="#64748b" style="background:#64748b" onclick="pickColor(this)"></div>
+                    <div class="color-swatch" data-color="#0d9488" style="background:#0d9488" onclick="pickColor(this)"></div>
+                  </div>
+                </div>
 
-            <div class="mb-3">
-              <label class="form-label-m">Warna / Tema</label>
-              <div class="color-picker-wrap">
-                <div class="color-swatch sel" data-color="#e85d26" style="background:#e85d26" onclick="pickColor(this)"></div>
-                <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b" onclick="pickColor(this)"></div>
-                <div class="color-swatch" data-color="#22c55e" style="background:#22c55e" onclick="pickColor(this)"></div>
-                <div class="color-swatch" data-color="#3b82f6" style="background:#3b82f6" onclick="pickColor(this)"></div>
-                <div class="color-swatch" data-color="#a855f7" style="background:#a855f7" onclick="pickColor(this)"></div>
-                <div class="color-swatch" data-color="#ec4899" style="background:#ec4899" onclick="pickColor(this)"></div>
-                <div class="color-swatch" data-color="#64748b" style="background:#64748b" onclick="pickColor(this)"></div>
-                <div class="color-swatch" data-color="#0d9488" style="background:#0d9488" onclick="pickColor(this)"></div>
+                <div class="mb-0">
+                  <label class="form-label-m">Ikon</label>
+                  <div class="icon-selector-grid">
+                    <span class="icon-opt sel" data-icon="👤" onclick="pickIcon(this)">👤</span>
+                    <span class="icon-opt" data-icon="👑" onclick="pickIcon(this)">👑</span>
+                    <span class="icon-opt" data-icon="🛡️" onclick="pickIcon(this)">🛡️</span>
+                    <span class="icon-opt" data-icon="👥" onclick="pickIcon(this)">👥</span>
+                    <span class="icon-opt" data-icon="✍️" onclick="pickIcon(this)">✍️</span>
+                    <span class="icon-opt" data-icon="🔍" onclick="pickIcon(this)">🔍</span>
+                    <span class="icon-opt" data-icon="📝" onclick="pickIcon(this)">📝</span>
+                    <span class="icon-opt" data-icon="🎨" onclick="pickIcon(this)">🎨</span>
+                    <span class="icon-opt" data-icon="📊" onclick="pickIcon(this)">📊</span>
+                    <span class="icon-opt" data-icon="🏆" onclick="pickIcon(this)">🏆</span>
+                    <span class="icon-opt" data-icon="⚙️" onclick="pickIcon(this)">⚙️</span>
+                    <span class="icon-opt" data-icon="🔑" onclick="pickIcon(this)">🔑</span>
+                    <span class="icon-opt" data-icon="🌐" onclick="pickIcon(this)">🌐</span>
+                    <span class="icon-opt" data-icon="📅" onclick="pickIcon(this)">📅</span>
+                    <span class="icon-opt" data-icon="✉️" onclick="pickIcon(this)">✉️</span>
+                    <span class="icon-opt" data-icon="🔔" onclick="pickIcon(this)">🔔</span>
+                    <span class="icon-opt" data-icon="💬" onclick="pickIcon(this)">💬</span>
+                    <span class="icon-opt" data-icon="⭐" onclick="pickIcon(this)">⭐</span>
+                    <span class="icon-opt" data-icon="🔥" onclick="pickIcon(this)">🔥</span>
+                    <span class="icon-opt" data-icon="🍳" onclick="pickIcon(this)">🍳</span>
+                    <span class="icon-opt" data-icon="🍕" onclick="pickIcon(this)">🍕</span>
+                    <span class="icon-opt" data-icon="💡" onclick="pickIcon(this)">💡</span>
+                    <span class="icon-opt" data-icon="🚀" onclick="pickIcon(this)">🚀</span>
+                    <span class="icon-opt" data-icon="🔒" onclick="pickIcon(this)">🔒</span>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div class="mb-0">
-              <label class="form-label-m">Ikon</label>
-              <div style="display:flex;gap:.45rem;flex-wrap:wrap">
-                <span class="icon-opt sel" data-icon="👤" onclick="pickIcon(this)" style="padding:.3rem .55rem;border-radius:8px;border:1.5px solid var(--primary-border);background:var(--primary-pale);cursor:pointer;font-size:1.1rem;transition:all .2s">👤</span>
-                <span class="icon-opt" data-icon="🛡️" onclick="pickIcon(this)" style="padding:.3rem .55rem;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1.1rem;transition:all .2s">🛡️</span>
-                <span class="icon-opt" data-icon="✍️" onclick="pickIcon(this)" style="padding:.3rem .55rem;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1.1rem;transition:all .2s">✍️</span>
-                <span class="icon-opt" data-icon="🔍" onclick="pickIcon(this)" style="padding:.3rem .55rem;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1.1rem;transition:all .2s">🔍</span>
-                <span class="icon-opt" data-icon="📝" onclick="pickIcon(this)" style="padding:.3rem .55rem;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1.1rem;transition:all .2s">📝</span>
-                <span class="icon-opt" data-icon="🎨" onclick="pickIcon(this)" style="padding:.3rem .55rem;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1.1rem;transition:all .2s">🎨</span>
-                <span class="icon-opt" data-icon="📊" onclick="pickIcon(this)" style="padding:.3rem .55rem;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1.1rem;transition:all .2s">📊</span>
-                <span class="icon-opt" data-icon="🏆" onclick="pickIcon(this)" style="padding:.3rem .55rem;border-radius:8px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1.1rem;transition:all .2s">🏆</span>
-              </div>
-            </div>
-
           </div>
           <div class="modal-footer-custom">
             <button class="btn-modal-cancel" data-bs-dismiss="modal">Batal</button>

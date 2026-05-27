@@ -328,3 +328,44 @@
   .btn-save  { margin-left: 0; justify-content: center; }
 }
 @media (max-width:400px) { .role-grid { grid-template-columns: 1fr; } }
+
+/* Icon Selector Grid */
+.icon-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: .45rem;
+  margin-top: .25rem;
+}
+
+.icon-opt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.15rem;
+  transition: all .2s ease;
+  user-select: none;
+}
+
+.icon-opt:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-border);
+  background: var(--primary-pale);
+}
+
+.icon-opt.sel {
+  border-color: var(--primary-border);
+  background: var(--primary-pale);
+  transform: scale(1.05);
+}
+
+@media (max-width: 991px) {
+  .icon-selector-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
