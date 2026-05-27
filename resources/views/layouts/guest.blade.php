@@ -23,6 +23,10 @@
         ])
     </head>
     <body>
+        @if (session('toast_error'))
+            <div id="session-toast" data-type="danger" data-title="Akses Ditolak" data-message="{{ session('toast_error') }}"></div>
+        @endif
+
         <!-- Background Scene -->
         <div class="bg-scene">
             <div class="blob blob-1"></div>

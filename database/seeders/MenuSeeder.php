@@ -20,14 +20,6 @@ class MenuSeeder extends Seeder
         $menus = [
             // MASTER DATA
             [
-                'name' => 'Project',
-                'url' => 'projects',
-                'category' => 'MASTER DATA',
-                'icon' => 'bi-folder2-open',
-                'is_active' => '1',
-                'orders' => 1,
-            ],
-            [
                 'name' => 'Kategori',
                 'url' => 'categories',
                 'category' => 'MASTER DATA',
@@ -201,8 +193,12 @@ class MenuSeeder extends Seeder
             $this->attachMenupermission($menu, $customPermissions, ['dev']);
         }
 
+        // Delete menus that are no longer in the seeded list
+        Menu::whereNotIn('url', array_column($menus, 'url'))->delete();
+
         // Clear menu cache to make sure updates are visible immediately
         Cache::forget('menus_data');
+        Cache::forget('menus_data_array');
         Cache::forget('menus_url_list');
     }
 }

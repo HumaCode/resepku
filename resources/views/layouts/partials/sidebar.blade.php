@@ -9,6 +9,14 @@
     <!-- Nav -->
     <nav class="sidebar-nav" id="sidebarNav">
 
+        <!-- ─ Main ─ -->
+        <div class="nav-item-wrap">
+            <a href="{{ route('dashboard') }}" class="nav-link-custom {{ request()->routeIs('dashboard') ? 'active' : '' }}" data-tooltip="Dashboard">
+                <div class="nav-icon"><i class="bi bi-grid-1x2"></i></div>
+                <span class="sidebar-label">Dashboard</span>
+            </a>
+        </div>
+
         @foreach (menus() as $category => $items)
             @php
                 // Filter menu berdasarkan permission user

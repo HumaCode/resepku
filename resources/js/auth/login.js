@@ -108,10 +108,18 @@ $(document).ready(function() {
               });
             }
 
+            let toastMessage = 'Periksa kembali data yang dimasukkan.';
+            if (errors) {
+              const firstKey = Object.keys(errors)[0];
+              if (firstKey && errors[firstKey][0]) {
+                toastMessage = errors[firstKey][0];
+              }
+            }
+
             PA.toast({
               type: 'warning',
               title: 'Gagal Masuk',
-              message: 'Periksa kembali data yang dimasukkan.',
+              message: toastMessage,
               duration: 4000,
               position: 'top-right'
             });
@@ -426,6 +434,18 @@ $(document).ready(function() {
           }
         }
       });
+    });
+  }
+
+  // ── Session Toast Trigger ──
+  const sessionToast = document.getElementById('session-toast');
+  if (sessionToast && typeof PA !== 'undefined') {
+    PA.toast({
+      type: sessionToast.dataset.type || 'danger',
+      title: sessionToast.dataset.title || 'Pemberitahuan',
+      message: sessionToast.dataset.message,
+      duration: 5000,
+      position: 'top-right'
     });
   }
 });

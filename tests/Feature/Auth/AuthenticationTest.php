@@ -39,3 +39,29 @@ test('users can logout', function () {
     $this->assertGuest();
     $response->assertRedirect('/');
 });
+
+test('inactive users cannot authenticate', function () {
+    $user = User::factory()->create([
+        'is_active' => '0',
+    ]);
+
+    $response = $this->post('/login', [
+        'username' => $user->username,
+        'password' => 'password',
+    ]);
+
+    $this->assertGuest();
+    $response->assertSessionHasErrors('username');
+});
+
+test('inactive user accessing dashboard is logged out and redirected to login with toast error', function () {
+    $user = User::factory()->create([
+        'is_active' => '0',
+    ]);
+
+    $response = $this->actingAs($user)->get('/dashboard');
+
+    $this->assertGuest();
+    $response->assertRedirect(route('login'));
+    $response->assertSessionHas('toast_error');
+});
