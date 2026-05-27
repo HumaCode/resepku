@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>419 — Sesi Kedaluwarsa — {{ config('app.name', 'ResepKita') }}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
   <style>
   :root {
@@ -34,7 +34,7 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: var(--bg);
     color: var(--text);
     overflow-x: hidden;
@@ -96,7 +96,7 @@
     50%      { box-shadow: 0 6px 22px rgba(232,93,38,.65); }
   }
   .brand-name-sm {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 1.3rem; font-weight: 900;
     color: var(--secondary); letter-spacing: -.3px;
   }
@@ -122,7 +122,7 @@
 
   /* Nomor error besar */
   .error-code {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Poppins', sans-serif;
     font-size: clamp(5.5rem, 20vw, 9.5rem);
     font-weight: 900;
     line-height: 1;
@@ -167,7 +167,7 @@
 
   /* Judul & deskripsi */
   .error-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Poppins', sans-serif;
     font-size: clamp(1.25rem, 4vw, 1.7rem);
     font-weight: 900; color: var(--secondary);
     margin-bottom: .7rem; line-height: 1.3;
@@ -191,7 +191,7 @@
     display: inline-flex; align-items: center; gap: .4rem;
     padding: .7rem 1.5rem; border: none; border-radius: 12px;
     background: linear-gradient(135deg, var(--primary-light), var(--primary));
-    color: #fff; font-family: 'DM Sans', sans-serif;
+    color: #fff; font-family: 'Poppins', sans-serif;
     font-size: .88rem; font-weight: 600; cursor: pointer;
     text-decoration: none;
     box-shadow: 0 4px 16px rgba(232,93,38,.35);
@@ -203,7 +203,7 @@
     padding: .68rem 1.25rem;
     border: 1.5px solid var(--border); border-radius: 12px;
     background: var(--surface); color: var(--secondary);
-    font-family: 'DM Sans', sans-serif; font-size: .88rem;
+    font-family: 'Poppins', sans-serif; font-size: .88rem;
     font-weight: 600; cursor: pointer; text-decoration: none;
     transition: border-color .2s, color .2s, background .2s;
   }
@@ -232,7 +232,7 @@
 
   /* Countdown */
   .countdown-val {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 2.2rem; font-weight: 900;
     color: var(--primary); line-height: 1;
     margin: .5rem 0 .2rem;
