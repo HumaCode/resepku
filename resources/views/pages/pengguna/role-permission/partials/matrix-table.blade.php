@@ -2,7 +2,7 @@
         <table class="perm-table" id="permTable">
           <thead>
             <tr>
-              <th style="text-align:left">{{ __('role_permission.matrix.header_permission') }}</th>
+              <th style="text-align:left">{{ __('pengguna/role_permission.matrix.header_permission') }}</th>
               @foreach($roles as $role)
                 @php
                   $roleColor = $role->color ?? '#64748b';
@@ -22,8 +22,8 @@
                     
                     @if($role->slug !== 'dev')
                       <label class="select-all-wrap" style="--cb-color:{{ $roleColor }};--cb-color-ring:{{ $ringColor }}">
-                        <input type="checkbox" class="select-all-column" data-role="{{ $role->slug }}" title="{{ __('role_permission.matrix.select_all') }}" style="--cb-color:{{ $roleColor }};--cb-color-ring:{{ $ringColor }}" />
-                        <span class="select-all-label">{{ __('role_permission.matrix.select_all') }}</span>
+                        <input type="checkbox" class="select-all-column" data-role="{{ $role->slug }}" title="{{ __('pengguna/role_permission.matrix.select_all') }}" style="--cb-color:{{ $roleColor }};--cb-color-ring:{{ $ringColor }}" />
+                        <span class="select-all-label">{{ __('pengguna/role_permission.matrix.select_all') }}</span>
                       </label>
                     @endif
                   </div>

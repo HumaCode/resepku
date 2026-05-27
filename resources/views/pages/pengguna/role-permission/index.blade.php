@@ -1,7 +1,7 @@
 <x-app-layout>
 
-    @section('title', __('role_permission.title'))
-    @section('page-title', __('role_permission.title'))
+    @section('title', __('pengguna/role_permission.title'))
+    @section('page-title', __('pengguna/role_permission.title'))
 
     @push('styles')
         @vite(['resources/css/backend/role-permission.css'])
@@ -13,12 +13,12 @@
 
     <!-- Breadcrumb -->
     <x-breadcrumb-bar 
-        :title="__('role_permission.title')"
+        :title="__('pengguna/role_permission.title')"
         icon="bi-person-badge"
-        :desc="__('role_permission.desc')"
+        :desc="__('pengguna/role_permission.desc')"
         :items="[
             'Home' => route('dashboard'),
-            __('role_permission.title') => null
+            __('pengguna/role_permission.title') => null
         ]"
     />
 
@@ -77,7 +77,7 @@
       <!-- Tambah Role -->
       <div class="role-add-card" onclick="openAddRole()">
         <i class="bi bi-plus-circle-dotted"></i>
-        <span>{{ __('role_permission.add_card.title') }}</span>
+        <span>{{ __('pengguna/role_permission.add_card.title') }}</span>
       </div>
 
     </div><!-- /role-grid -->
@@ -86,11 +86,11 @@
     <div class="save-bar" id="saveBar" data-aos="fade-up" data-aos-delay="80">
       <div class="save-bar-info">
         <i class="bi bi-info-circle"></i>
-        {{ __('role_permission.save_bar.unsaved') }} &nbsp;
-        <span class="change-badge" id="changeCount"><i class="bi bi-pencil-fill"></i> {{ __('role_permission.save_bar.changes', ['count' => 0]) }}</span>
+        {{ __('pengguna/role_permission.save_bar.unsaved') }} &nbsp;
+        <span class="change-badge" id="changeCount"><i class="bi bi-pencil-fill"></i> {{ __('pengguna/role_permission.save_bar.changes', ['count' => 0]) }}</span>
       </div>
-      <button class="btn-reset" onclick="resetPermissions()"><i class="bi bi-arrow-counterclockwise"></i> {{ __('role_permission.save_bar.reset') }}</button>
-      <button class="btn-save"  onclick="savePermissions()"><i class="bi bi-floppy-fill"></i> {{ __('role_permission.save_bar.save') }}</button>
+      <button class="btn-reset" onclick="resetPermissions()"><i class="bi bi-arrow-counterclockwise"></i> {{ __('pengguna/role_permission.save_bar.reset') }}</button>
+      <button class="btn-save"  onclick="savePermissions()"><i class="bi bi-floppy-fill"></i> {{ __('pengguna/role_permission.save_bar.save') }}</button>
     </div>
 
     <!-- ══ PERMISSION MATRIX ══ -->
@@ -98,21 +98,21 @@
       <!-- Loading Overlay -->
       <div class="matrix-card-overlay">
         <div class="matrix-spinner"></div>
-        <div class="matrix-loading-text">{{ __('role_permission.matrix.syncing') }}</div>
+        <div class="matrix-loading-text">{{ __('pengguna/role_permission.matrix.syncing') }}</div>
       </div>
 
       <div class="matrix-header">
         <div class="matrix-title-wrap">
           <div class="matrix-icon"><i class="bi bi-table"></i></div>
           <div>
-            <div class="matrix-title">{{ __('role_permission.matrix.title') }}</div>
-            <div class="matrix-sub">{{ __('role_permission.matrix.sub') }}</div>
+            <div class="matrix-title">{{ __('pengguna/role_permission.matrix.title') }}</div>
+            <div class="matrix-sub">{{ __('pengguna/role_permission.matrix.sub') }}</div>
           </div>
         </div>
         <!-- Select role filter (mobile) -->
         <select class="d-md-none" id="roleFilter" onchange="filterByRole(this.value)"
           style="padding:.5rem .8rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.83rem;background:var(--bg);color:var(--text);outline:none">
-          <option value="all">{{ __('role_permission.matrix.filter_all') }}</option>
+          <option value="all">{{ __('pengguna/role_permission.matrix.filter_all') }}</option>
           @foreach($roles as $role)
             @if($role->slug !== 'dev')
               <option value="{{ $role->slug }}">{{ $role->name === 'user' ? 'Member' : $role->name }}</option>
