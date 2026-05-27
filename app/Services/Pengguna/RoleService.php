@@ -46,4 +46,15 @@ class RoleService
     {
         return $this->roleRepository->updateRole($role, $data);
     }
+
+    /**
+     * Delete a role.
+     *
+     * @param \App\Models\Role $role
+     * @return bool|null
+     */
+    public function deleteRole($role)
+    {
+        return $this->roleRepository->deleteRole($role);
+    }
 }

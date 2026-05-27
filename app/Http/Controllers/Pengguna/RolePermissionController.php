@@ -76,4 +76,22 @@ class RolePermissionController extends Controller
 
         return ResponseHelper::jsonResponse(true, 'Role berhasil diperbarui', $data, 200);
     }
+
+    /**
+     * Remove the specified role from storage.
+     *
+     * @param Role $role
+     * @return JsonResponse
+     */
+    public function destroy(Role $role): JsonResponse
+    {
+        // Protect system roles from deletion
+        if (in_array($role->slug, ['dev', 'admin', 'user'])) {
+            return ResponseHelper::jsonResponse(false, 'Role bawaan sistem tidak dapat dihapus.', null, 422);
+        }
+
+        $this->roleService->deleteRole($role);
+
+        return ResponseHelper::jsonResponse(true, 'Role berhasil dihapus', null, 200);
+    }
 }

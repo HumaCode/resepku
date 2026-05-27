@@ -224,4 +224,56 @@ test('updating system role slug is blocked', function () {
         ]);
 });
 
+test('guest cannot delete a role', function () {
+    $role = Role::create([
+        'name' => 'editor',
+        'slug' => 'editor',
+        'guard_name' => 'web',
+    ]);
+
+    $this->deleteJson(route('roles-permissions.destroy', $role))
+        ->assertStatus(401);
+});
+
+test('authenticated user can delete a custom role', function () {
+    $user = User::factory()->create();
+    $role = Role::create([
+        'name' => 'Editor Baru',
+        'slug' => 'editor-baru',
+        'guard_name' => 'web',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->deleteJson(route('roles-permissions.destroy', $role))
+        ->assertStatus(200);
+
+    expect($response['success'])->toBeTrue();
+    expect($response['message'])->toBe('Role berhasil dihapus');
+
+    $this->assertDatabaseMissing('roles', [
+        'id' => $role->id,
+    ]);
+});
+
+test('authenticated user cannot delete a system role', function () {
+    $user = User::factory()->create();
+    $role = Role::create([
+        'name' => 'admin',
+        'slug' => 'admin',
+        'guard_name' => 'web',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->deleteJson(route('roles-permissions.destroy', $role))
+        ->assertStatus(422);
+
+    expect($response['success'])->toBeFalse();
+    expect($response['message'])->toBe('Role bawaan sistem tidak dapat dihapus.');
+
+    $this->assertDatabaseHas('roles', [
+        'id' => $role->id,
+    ]);
+});
+
+
 

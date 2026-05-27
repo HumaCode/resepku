@@ -29,4 +29,12 @@ interface RoleRepositoryInterface
      * @return \App\Models\Role
      */
     public function updateRole($role, array $data);
+
+    /**
+     * Delete a role.
+     *
+     * @param \App\Models\Role $role
+     * @return bool|null
+     */
+    public function deleteRole($role);
 }

@@ -41,4 +41,15 @@ class RoleRepository implements RoleRepositoryInterface
         $role->update($data);
         return $role;
     }
+
+    /**
+     * Delete a role.
+     *
+     * @param Role $role
+     * @return bool|null
+     */
+    public function deleteRole($role)
+    {
+        return $role->delete();
+    }
 }

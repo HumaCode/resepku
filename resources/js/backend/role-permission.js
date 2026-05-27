@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let actionsHtml = `<button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('${role.id}')"><i class="bi bi-pencil"></i></button>`;
             if (!isDev) {
-              actionsHtml += `<button class="rc-btn del" title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('${role.name}')"><i class="bi bi-trash"></i></button>`;
+              actionsHtml += `<button class="rc-btn del" title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('${role.id}')"><i class="bi bi-trash"></i></button>`;
             }
 
             const cardHtml = `
@@ -325,24 +325,58 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ════════════════════════════════════════════
-     MODAL HAPUS ROLE
+     MODAL HAPUS ROLE (PA.dialog)
   ════════════════════════════════════════════ */
-  let _delRoleName = '';
-  window.openDeleteRole = function(name) {
-    _delRoleName = name;
-    document.getElementById('delRoleName').textContent = '"' + name + '"';
-    const modalEl = document.getElementById('modalDelRole');
-    if (modalEl && window.bootstrap) {
-      new window.bootstrap.Modal(modalEl).show();
-    }
-  }
-  window.confirmDeleteRole = function() {
-    const modalEl = document.getElementById('modalDelRole');
-    if (modalEl && window.bootstrap) {
-      const modalInstance = window.bootstrap.Modal.getInstance(modalEl);
-      if (modalInstance) modalInstance.hide();
-    }
-    window.showToast('Role "' + _delRoleName + '" berhasil dihapus', 'danger');
+  window.openDeleteRole = function(id) {
+    const role = loadedRolesCache.find(r => r.id === id);
+    if (!role) return;
+
+    PA.dialog({
+      type: 'warning',
+      title: 'Hapus Peran?',
+      message: `Apakah Anda yakin ingin menghapus peran "${role.name}"? Tindakan ini tidak dapat dibatalkan.`,
+      confirm: { text: 'Ya, Hapus', cls: 'pa-btn-danger' },
+      cancel: { text: 'Batal' }
+    }).then((result) => {
+      if (result) {
+        // Show loading state
+        PA.loading({ title: 'Sedang Proses', message: 'Menghapus peran...' });
+
+        $.ajax({
+          url: `/roles-permissions-management/roles/${id}`,
+          method: 'DELETE',
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          dataType: 'json',
+          success: function(response) {
+            PA.closeAll();
+            PA.toast({
+              type: 'success',
+              title: 'Sukses',
+              message: response.message || 'Peran berhasil dihapus',
+              duration: 4000,
+              position: 'bottom-center'
+            });
+            loadRoles();
+          },
+          error: function(xhr) {
+            PA.closeAll();
+            let errorMsg = 'Terjadi kesalahan sistem, silakan coba lagi.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMsg = xhr.responseJSON.message;
+            }
+            PA.toast({
+              type: 'danger',
+              title: 'Kesalahan Sistem',
+              message: errorMsg,
+              duration: 5000,
+              position: 'bottom-center'
+            });
+          }
+        });
+      }
+    });
   }
 
   /* ════════════════════════════════════════════
