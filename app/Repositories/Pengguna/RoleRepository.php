@@ -28,4 +28,17 @@ class RoleRepository implements RoleRepositoryInterface
         $data['guard_name'] = $data['guard_name'] ?? 'web';
         return Role::create($data);
     }
+
+    /**
+     * Update an existing role.
+     *
+     * @param Role $role
+     * @param array $data
+     * @return Role
+     */
+    public function updateRole($role, array $data)
+    {
+        $role->update($data);
+        return $role;
+    }
 }

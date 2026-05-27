@@ -20,4 +20,13 @@ interface RoleRepositoryInterface
      * @return \App\Models\Role
      */
     public function createRole(array $data);
+
+    /**
+     * Update an existing role.
+     *
+     * @param \App\Models\Role $role
+     * @param array $data
+     * @return \App\Models\Role
+     */
+    public function updateRole($role, array $data);
 }

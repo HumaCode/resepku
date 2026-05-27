@@ -132,3 +132,96 @@ test('storing a role rejects duplicate names and slugs', function () {
         ->assertJsonValidationErrors(['name', 'slug']);
 });
 
+test('guest cannot update a role', function () {
+    $role = Role::create([
+        'name' => 'editor',
+        'slug' => 'editor',
+        'guard_name' => 'web',
+    ]);
+
+    $this->putJson(route('roles-permissions.update', $role), [
+        'name' => 'editor-new',
+        'slug' => 'editor-new',
+    ])->assertStatus(401);
+});
+
+test('authenticated user can update a custom role', function () {
+    $user = User::factory()->create();
+    $role = Role::create([
+        'name' => 'Editor Konten',
+        'slug' => 'editor-konten',
+        'guard_name' => 'web',
+        'color' => '#22c55e',
+        'icon' => '📝',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->putJson(route('roles-permissions.update', $role), [
+            'name' => 'Editor Diperbarui',
+            'slug' => 'editor-diperbarui',
+            'description' => 'Deskripsi baru',
+            'color' => '#3b82f6',
+            'icon' => '🛡️',
+        ])
+        ->assertStatus(200);
+
+    expect($response['success'])->toBeTrue();
+    expect($response['data']['name'])->toBe('Editor Diperbarui');
+    expect($response['data']['slug'])->toBe('editor-diperbarui');
+    expect($response['data']['color'])->toBe('#3b82f6');
+    expect($response['data']['icon'])->toBe('🛡️');
+
+    $this->assertDatabaseHas('roles', [
+        'id' => $role->id,
+        'name' => 'Editor Diperbarui',
+        'slug' => 'editor-diperbarui',
+        'color' => '#3b82f6',
+        'icon' => '🛡️',
+    ]);
+});
+
+test('updating a role rejects duplicate names and slugs', function () {
+    $user = User::factory()->create();
+    
+    $role1 = Role::create([
+        'name' => 'editor',
+        'slug' => 'editor',
+        'guard_name' => 'web',
+    ]);
+    
+    $role2 = Role::create([
+        'name' => 'author',
+        'slug' => 'author',
+        'guard_name' => 'web',
+    ]);
+
+    $this->actingAs($user)
+        ->putJson(route('roles-permissions.update', $role2), [
+            'name' => 'editor',
+            'slug' => 'editor',
+        ])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['name', 'slug']);
+});
+
+test('updating system role slug is blocked', function () {
+    $user = User::factory()->create();
+    $role = Role::create([
+        'name' => 'admin',
+        'slug' => 'admin',
+        'guard_name' => 'web',
+    ]);
+
+    $this->actingAs($user)
+        ->putJson(route('roles-permissions.update', $role), [
+            'name' => 'Admin Baru',
+            'slug' => 'admin-baru', // changing slug of system role
+        ])
+        ->assertStatus(422)
+        ->assertJsonFragment([
+            'success' => false,
+            'message' => 'Role bawaan sistem tidak boleh diubah slug-nya.'
+        ]);
+});
+
+

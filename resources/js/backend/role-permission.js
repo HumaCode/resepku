@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+  let loadedRolesCache = [];
+
   /* ════════════════════════════════════════════
      AJAX ROLE DATA LOADING
      ════════════════════════════════════════════ */
@@ -46,13 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
       success: function(response) {
         $grid.find('.loading-state').remove();
         if (response.success && response.data) {
+          loadedRolesCache = response.data;
           response.data.forEach(role => {
             const config = getRoleConfig(role);
             const isDev = role.slug === 'dev';
             const userCountStr = Number(role.users_count).toLocaleString('id-ID');
             const permCountStr = isDev ? 'Semua Akses' : `${role.permissions_count} izin`;
 
-            let actionsHtml = `<button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('${role.name}')"><i class="bi bi-pencil"></i></button>`;
+            let actionsHtml = `<button class="rc-btn edit" title="Edit Role" onclick="event.stopPropagation();openEditRole('${role.id}')"><i class="bi bi-pencil"></i></button>`;
             if (!isDev) {
               actionsHtml += `<button class="rc-btn del" title="Hapus Role" onclick="event.stopPropagation();openDeleteRole('${role.name}')"><i class="bi bi-trash"></i></button>`;
             }
@@ -104,25 +107,69 @@ document.addEventListener('DOMContentLoaded', () => {
      MODAL ROLE — TAMBAH / EDIT
   ════════════════════════════════════════════ */
   window.openAddRole = function() {
+    $('#modalRole').removeAttr('data-edit-id');
     document.getElementById('modalRoleTitle').textContent = 'Tambah Role Baru';
     document.getElementById('modalRoleSub').textContent   = 'Buat peran baru dengan izin custom';
     document.getElementById('modalRoleIcon').innerHTML    = '<i class="bi bi-plus-lg"></i>';
     document.getElementById('roleNameInput').value = '';
     document.getElementById('roleSlugInput').value = '';
     document.getElementById('roleDescInput').value = '';
+
+    // Enable fields in case they were disabled from system role editing
+    $('#roleNameInput').prop('disabled', false);
+    $('#roleSlugInput').prop('disabled', false);
+
+    // Reset picker selections to defaults
+    document.querySelectorAll('.color-swatch').forEach((s, idx) => {
+      s.classList.remove('sel');
+      if (idx === 0) s.classList.add('sel');
+    });
+    document.querySelectorAll('.icon-opt').forEach((o, idx) => {
+      o.classList.remove('sel');
+      if (idx === 0) o.classList.add('sel');
+    });
+
     const modalEl = document.getElementById('modalRole');
     if (modalEl && window.bootstrap) {
       new window.bootstrap.Modal(modalEl).show();
     }
   }
 
-  window.openEditRole = function(name) {
+  window.openEditRole = function(id) {
+    const role = loadedRolesCache.find(r => r.id === id);
+    if (!role) return;
+
+    $('#modalRole').attr('data-edit-id', id);
+
     document.getElementById('modalRoleTitle').textContent = 'Edit Role';
-    document.getElementById('modalRoleSub').textContent   = `Mengubah konfigurasi role "${name}"`;
+    document.getElementById('modalRoleSub').textContent   = `Mengubah konfigurasi role "${role.name}"`;
     document.getElementById('modalRoleIcon').innerHTML    = '<i class="bi bi-pencil"></i>';
-    document.getElementById('roleNameInput').value = name;
-    document.getElementById('roleSlugInput').value = name.toLowerCase().replace(/\s+/g,'-');
-    document.getElementById('roleDescInput').value = '';
+    
+    document.getElementById('roleNameInput').value = role.name;
+    document.getElementById('roleSlugInput').value = role.slug;
+    document.getElementById('roleDescInput').value = role.description || '';
+    
+    // Disable name/slug editing if it is a system role (dev, admin, user)
+    const isSystem = ['dev', 'admin', 'user'].includes(role.slug);
+    $('#roleNameInput').prop('disabled', isSystem);
+    $('#roleSlugInput').prop('disabled', isSystem);
+
+    // Select color swatch
+    document.querySelectorAll('.color-swatch').forEach(s => {
+      s.classList.remove('sel');
+      if (s.getAttribute('data-color') === role.color) {
+        s.classList.add('sel');
+      }
+    });
+
+    // Select icon option
+    document.querySelectorAll('.icon-opt').forEach(o => {
+      o.classList.remove('sel');
+      if (o.getAttribute('data-icon') === role.icon) {
+        o.classList.add('sel');
+      }
+    });
+
     const modalEl = document.getElementById('modalRole');
     if (modalEl && window.bootstrap) {
       new window.bootstrap.Modal(modalEl).show();
@@ -158,6 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const $slugInput = $('#roleSlugInput');
     const $descInput = $('#roleDescInput');
     
+    // Ignore input values from disabled fields for system roles when building payload,
+    // but validate if enabled.
     const name = $nameInput.val().trim();
     const slug = $slugInput.val().trim();
     const description = $descInput.val().trim();
@@ -169,12 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
     $slugInput.css('border-color', '');
     
     let isValid = true;
-    if (!name) {
+    if (!$nameInput.prop('disabled') && !name) {
       $nameInput.css('border-color', 'var(--danger)');
       $nameInput.focus();
       isValid = false;
     }
-    if (!slug) {
+    if (!$slugInput.prop('disabled') && !slug) {
       $slugInput.css('border-color', 'var(--danger)');
       if (isValid) {
         $slugInput.focus();
@@ -193,9 +242,16 @@ document.addEventListener('DOMContentLoaded', () => {
     $saveBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sedang proses...');
     $cancelBtn.prop('disabled', true);
     
+    const editId = $('#modalRole').attr('data-edit-id');
+    const isEdit = !!editId;
+    const ajaxUrl = isEdit 
+      ? `/roles-permissions-management/roles/${editId}` 
+      : '/roles-permissions-management/roles';
+    const ajaxMethod = isEdit ? 'PUT' : 'POST';
+    
     $.ajax({
-      url: '/roles-permissions-management/roles',
-      method: 'POST',
+      url: ajaxUrl,
+      method: ajaxMethod,
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
@@ -223,12 +279,13 @@ document.addEventListener('DOMContentLoaded', () => {
         $nameInput.val('');
         $slugInput.val('');
         $descInput.val('');
+        $('#modalRole').removeAttr('data-edit-id');
         
         // Success Toast
         PA.toast({
           type: 'success',
           title: 'Sukses',
-          message: response.message || 'Role baru berhasil disimpan',
+          message: response.message || (isEdit ? 'Role berhasil diperbarui' : 'Role baru berhasil disimpan'),
           duration: 4000,
           position: 'bottom-center'
         });
