@@ -325,11 +325,181 @@
   cursor: not-allowed;
 }
 
-/* Toolbar Specifics */
+/* ── Toolbar ── */
+.cat-toolbar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cat-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.cat-search-wrap i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: .95rem;
+  pointer-events: none;
+}
+
+.cat-search {
+  width: 100%;
+  padding: .6rem 1rem .6rem 2.5rem;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: .88rem;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color .25s, box-shadow .25s;
+}
+
+.cat-search:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(232,93,38,.1);
+  background: var(--surface);
+}
+
+.cat-search::placeholder {
+  color: #bba898;
+}
+
+.cat-filter {
+  padding: .6rem .9rem;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: .85rem;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  transition: border-color .25s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath fill='%238a7060' d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 2rem;
+}
+
+.cat-filter:focus {
+  border-color: var(--primary);
+}
+
+/* Reset Button */
+.btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .62rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--muted);
+  font-family: 'Poppins', sans-serif;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color .2s, color .2s, background .2s, transform .15s;
+}
+
+.btn-reset:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-pale);
+  transform: translateY(-1px);
+}
+
+.btn-reset:active {
+  transform: translateY(0);
+}
+
+/* View Mode Toggle */
+.view-toggle {
+  display: flex;
+  gap: .3rem;
+}
+
+.view-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: .95rem;
+  transition: all .2s;
+}
+
+.view-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.view-btn:not(.active):hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Add Button */
+.btn-tambah {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .62rem 1.1rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: .87rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(232,93,38,.35);
+  transition: transform .2s, box-shadow .2s;
+}
+
+.btn-tambah:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(232,93,38,.45);
+}
+
+.btn-tambah i {
+  font-size: 1rem;
+  transition: transform .3s;
+}
+
+.btn-tambah:hover i {
+  transform: rotate(90deg);
+}
+
+/* Specific overrides for toolbar inputs/selects using component classes */
 .cat-toolbar .cat-search.form-input-m {
   width: 100%;
   padding: .6rem 1rem .6rem 2.5rem;
 }
+
 .cat-toolbar .cat-filter.form-input-m {
   width: auto;
   min-width: 130px;

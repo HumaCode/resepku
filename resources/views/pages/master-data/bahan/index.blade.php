@@ -71,8 +71,9 @@
         </x-form-select>
 
         <!-- Reset Button -->
-        <button type="button" class="btn-modal-cancel py-2" onclick="resetFilters()">
-            <i class="bi bi-arrow-clockwise"></i> {{ __('master-data/ingredient.toolbar.btn_reset') }}
+        <button type="button" class="btn-reset" onclick="resetFilters()" title="{{ __('master-data/ingredient.toolbar.btn_reset') }}">
+            <i class="bi bi-arrow-clockwise"></i>
+            <span class="d-none d-sm-inline">{{ __('master-data/ingredient.toolbar.btn_reset') }}</span>
         </button>
 
         <!-- View Mode Toggle -->
