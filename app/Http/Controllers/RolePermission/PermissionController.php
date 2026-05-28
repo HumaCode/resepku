@@ -68,7 +68,7 @@ class PermissionController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data permission berhasil dimuat.',
+            'message' => __('pengguna/permission.messages.fetch_success'),
             'data' => $data->resolve(),
             'statistics' => $statistics,
         ], 200);
@@ -85,7 +85,7 @@ class PermissionController extends Controller
         $permission = $this->permissionService->createPermission($validated);
         $data = new PermissionResource($permission);
 
-        return ResponseHelper::jsonResponse(true, 'Permission baru berhasil disimpan.', $data, 201);
+        return ResponseHelper::jsonResponse(true, __('pengguna/permission.messages.store_success'), $data, 201);
     }
 
     /**
@@ -99,7 +99,7 @@ class PermissionController extends Controller
         $updated = $this->permissionService->updatePermission($permission, $validated);
         $data = new PermissionResource($updated);
 
-        return ResponseHelper::jsonResponse(true, 'Permission berhasil diperbarui.', $data, 200);
+        return ResponseHelper::jsonResponse(true, __('pengguna/permission.messages.update_success'), $data, 200);
     }
 
     /**
@@ -108,7 +108,7 @@ class PermissionController extends Controller
     public function destroy(Permission $permission): JsonResponse
     {
         $this->permissionService->deletePermission($permission);
-        return ResponseHelper::jsonResponse(true, 'Permission berhasil dihapus.', null, 200);
+        return ResponseHelper::jsonResponse(true, __('pengguna/permission.messages.delete_success'), null, 200);
     }
 
     /**
@@ -119,6 +119,6 @@ class PermissionController extends Controller
         $updated = $this->permissionService->toggleActivePermission($permission);
         $data = new PermissionResource($updated);
 
-        return ResponseHelper::jsonResponse(true, 'Status permission berhasil diubah.', $data, 200);
+        return ResponseHelper::jsonResponse(true, __('pengguna/permission.messages.status_toggled'), $data, 200);
     }
 }

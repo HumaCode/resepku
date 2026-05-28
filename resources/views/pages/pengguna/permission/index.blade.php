@@ -1,6 +1,6 @@
 <x-app-layout>
-    @section('title', 'Hak Akses (Permissions)')
-    @section('page-title', 'Hak Akses (Permissions)')
+    @section('title', __('pengguna/permission.title'))
+    @section('page-title', __('pengguna/permission.title'))
 
     @push('styles')
         @vite(['resources/css/backend/permission.css'])
@@ -12,9 +12,9 @@
 
     <!-- Breadcrumb Bar -->
     <x-breadcrumb-bar 
-        title="Hak Akses (Permissions)"
+        :title="__('pengguna/permission.title')"
         icon="bi-key"
-        desc="Kelola hak akses/permission sistem Spatie secara terpusat untuk otorisasi modul."
+        :desc="__('pengguna/permission.desc')"
         :items="[
             'Home' => route('dashboard'),
             'Pengguna' => '#',
@@ -26,19 +26,19 @@
     <div class="cat-stat-pills" data-aos="fade-up" data-aos-delay="50">
         <div class="stat-pill pill-all">
             <i class="bi bi-key-fill"></i>
-            <span>Total Permission: <strong>{{ $statistics['total'] }}</strong></span>
+            <span>{{ __('pengguna/permission.statistics.total') }}: <strong>{{ $statistics['total'] }}</strong></span>
         </div>
         <div class="stat-pill pill-active">
             <i class="bi bi-check-circle-fill"></i>
-            <span>Aktif: <strong>{{ $statistics['active'] }}</strong></span>
+            <span>{{ __('pengguna/permission.statistics.active') }}: <strong>{{ $statistics['active'] }}</strong></span>
         </div>
         <div class="stat-pill pill-inactive">
             <i class="bi bi-exclamation-triangle-fill"></i>
-            <span>Nonaktif: <strong>{{ $statistics['inactive'] }}</strong></span>
+            <span>{{ __('pengguna/permission.statistics.inactive') }}: <strong>{{ $statistics['inactive'] }}</strong></span>
         </div>
         <div class="stat-pill pill-guards">
             <i class="bi bi-shield-lock-fill"></i>
-            <span>Guard: <strong>{{ $statistics['guards'] }}</strong></span>
+            <span>{{ __('pengguna/permission.statistics.guards') }}: <strong>{{ $statistics['guards'] }}</strong></span>
         </div>
     </div>
 
@@ -47,32 +47,32 @@
         <!-- Search -->
         <div class="cat-search-wrap">
             <i class="bi bi-search"></i>
-            <x-form-input type="text" class="cat-search" id="permSearch" placeholder="Cari permission..."/>
+            <x-form-input type="text" class="cat-search" id="permSearch" :placeholder="__('pengguna/permission.toolbar.search_placeholder')"/>
         </div>
 
         <!-- Filter Status -->
         <x-form-select class="cat-filter" id="permStatusFilter">
-            <option value="all">Semua Status</option>
-            <option value="active">Aktif</option>
-            <option value="inactive">Nonaktif</option>
+            <option value="all">{{ __('pengguna/permission.toolbar.filter_all_status') }}</option>
+            <option value="active">{{ __('pengguna/permission.toolbar.filter_active') }}</option>
+            <option value="inactive">{{ __('pengguna/permission.toolbar.filter_inactive') }}</option>
         </x-form-select>
 
         <!-- Reset Button -->
-        <button type="button" class="btn-reset" onclick="resetFilters()" title="Reset Filter">
+        <button type="button" class="btn-reset" onclick="resetFilters()" title="{{ __('pengguna/permission.toolbar.btn_reset') }}">
             <i class="bi bi-arrow-clockwise"></i>
-            <span class="d-none d-sm-inline">Reset</span>
+            <span class="d-none d-sm-inline">{{ __('pengguna/permission.toolbar.btn_reset') }}</span>
         </button>
 
         <!-- View Mode Toggle -->
         <div class="view-toggle ms-auto">
-            <button class="view-btn active" id="btnGrid" onclick="setView('grid')" title="Tampilan Grid"><i class="bi bi-grid-3x3-gap"></i></button>
-            <button class="view-btn" id="btnTable" onclick="setView('table')" title="Tampilan Tabel"><i class="bi bi-table"></i></button>
+            <button class="view-btn active" id="btnGrid" onclick="setView('grid')" title="{{ __('pengguna/permission.toolbar.view_grid') }}"><i class="bi bi-grid-3x3-gap"></i></button>
+            <button class="view-btn" id="btnTable" onclick="setView('table')" title="{{ __('pengguna/permission.toolbar.view_table') }}"><i class="bi bi-table"></i></button>
         </div>
 
         <!-- Add Button -->
         <button class="btn-tambah" onclick="openCreateModal()">
             <i class="bi bi-plus-lg"></i>
-            <span class="d-none d-sm-inline">Tambah Permission</span>
+            <span class="d-none d-sm-inline">{{ __('pengguna/permission.toolbar.btn_add') }}</span>
             <span class="d-inline d-sm-none">Tambah</span>
         </button>
     </div>
@@ -91,13 +91,13 @@
                 <thead>
                     <tr>
                         <th class="sortable" onclick="sortTable('name')">
-                            Nama Permission <i class="bi bi-chevron-expand ms-1"></i>
+                            {{ __('pengguna/permission.table.name') }} <i class="bi bi-chevron-expand ms-1"></i>
                         </th>
                         <th class="sortable" onclick="sortTable('guard_name')">
-                            Guard <i class="bi bi-chevron-expand ms-1"></i>
+                            {{ __('pengguna/permission.table.guard') }} <i class="bi bi-chevron-expand ms-1"></i>
                         </th>
-                        <th>Status</th>
-                        <th style="width:100px; text-align:center;">Aksi</th>
+                        <th>{{ __('pengguna/permission.table.status') }}</th>
+                        <th style="width:100px; text-align:center;">{{ __('pengguna/permission.table.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody id="permTbody">
