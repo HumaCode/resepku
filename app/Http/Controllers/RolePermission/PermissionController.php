@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Pengguna;
+namespace App\Http\Controllers\RolePermission;
 
 use App\Http\Controllers\Controller;
-use App\Services\Pengguna\PermissionService;
-use App\Http\Requests\Pengguna\StorePermissionRequest;
-use App\Http\Requests\Pengguna\UpdatePermissionRequest;
-use App\Http\Resources\Pengguna\PermissionResource;
+use App\Services\RolePermission\PermissionService;
+use App\Http\Requests\RolePermission\StorePermissionRequest;
+use App\Http\Requests\RolePermission\UpdatePermissionRequest;
+use App\Http\Resources\RolePermission\PermissionResource;
 use App\Models\Permission;
 use App\Helpers\ResponseHelper;
 use Illuminate\Http\JsonResponse;

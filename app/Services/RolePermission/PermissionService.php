@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Pengguna;
+namespace App\Services\RolePermission;
 
-use App\Repositories\Pengguna\PermissionRepositoryInterface;
+use App\Repositories\RolePermission\PermissionRepositoryInterface;
 use App\Models\Permission;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

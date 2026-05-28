@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Pengguna;
+namespace App\Repositories\RolePermission;
 
 use App\Models\Permission;
 use Illuminate\Support\Collection;

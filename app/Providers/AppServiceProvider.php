@@ -17,8 +17,8 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \App\Repositories\Pengguna\PermissionRepositoryInterface::class,
-            \App\Repositories\Pengguna\PermissionRepository::class
+            \App\Repositories\RolePermission\PermissionRepositoryInterface::class,
+            \App\Repositories\RolePermission\PermissionRepository::class
         );
 
         $this->app->bind(

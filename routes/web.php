@@ -27,12 +27,12 @@ Route::middleware('auth')->group(function () {
 
     // Permissions Routes
     Route::middleware('can:menu permissions')->group(function () {
-        Route::get('/permissions', [\App\Http\Controllers\Pengguna\PermissionController::class, 'index'])->name('permissions.index');
-        Route::get('/permissions/list', [\App\Http\Controllers\Pengguna\PermissionController::class, 'list'])->name('permissions.list');
-        Route::post('/permissions', [\App\Http\Controllers\Pengguna\PermissionController::class, 'store'])->name('permissions.store');
-        Route::put('/permissions/{permission}', [\App\Http\Controllers\Pengguna\PermissionController::class, 'update'])->name('permissions.update');
-        Route::patch('/permissions/{permission}/toggle-active', [\App\Http\Controllers\Pengguna\PermissionController::class, 'toggleActive'])->name('permissions.toggle-active');
-        Route::delete('/permissions/{permission}', [\App\Http\Controllers\Pengguna\PermissionController::class, 'destroy'])->name('permissions.destroy');
+        Route::get('/permissions', [\App\Http\Controllers\RolePermission\PermissionController::class, 'index'])->name('permissions.index');
+        Route::get('/permissions/list', [\App\Http\Controllers\RolePermission\PermissionController::class, 'list'])->name('permissions.list');
+        Route::post('/permissions', [\App\Http\Controllers\RolePermission\PermissionController::class, 'store'])->name('permissions.store');
+        Route::put('/permissions/{permission}', [\App\Http\Controllers\RolePermission\PermissionController::class, 'update'])->name('permissions.update');
+        Route::patch('/permissions/{permission}/toggle-active', [\App\Http\Controllers\RolePermission\PermissionController::class, 'toggleActive'])->name('permissions.toggle-active');
+        Route::delete('/permissions/{permission}', [\App\Http\Controllers\RolePermission\PermissionController::class, 'destroy'])->name('permissions.destroy');
     });
 
     // Categories Routes
