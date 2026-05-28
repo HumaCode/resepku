@@ -453,15 +453,20 @@ $(function() {
     }
     $buttons.append($prevBtn);
 
-    // Page numbers
-    for (let i = 1; i <= meta.last_page; i++) {
-      const activeCls = i === meta.current_page ? 'active' : '';
-      const $pageBtn = $(`<button class="pag-btn ${activeCls}">${i}</button>`);
-      if (i !== meta.current_page) {
-        $pageBtn.on('click', () => loadTags(i));
+    // Page numbers (smart ellipsis)
+    const pages = getVisiblePages(meta.current_page, meta.last_page);
+    pages.forEach(p => {
+      if (p === '...') {
+        $buttons.append($('<span class="pag-ellipsis">…</span>'));
+      } else {
+        const activeCls = p === meta.current_page ? 'active' : '';
+        const $pageBtn = $(`<button class="pag-btn ${activeCls}">${p}</button>`);
+        if (p !== meta.current_page) {
+          $pageBtn.on('click', () => loadTags(p));
+        }
+        $buttons.append($pageBtn);
       }
-      $buttons.append($pageBtn);
-    }
+    });
 
     // Next button
     const nextDisabled = meta.current_page === meta.last_page ? 'disabled' : '';
@@ -486,5 +491,23 @@ $(function() {
     const slug = $('#tagSlug').val().trim() || 'nama-tag';
     $('#prevName').text('#' + slug);
     $('#prevDot').css('background', activeColor);
+  }
+
+  /**
+   * Smart pagination: returns an array of page numbers and '...' ellipsis markers.
+   */
+  function getVisiblePages(current, last) {
+    const delta = 2;
+    const pages = [];
+    const rangeStart = Math.max(2, current - delta);
+    const rangeEnd = Math.min(last - 1, current + delta);
+
+    pages.push(1);
+    if (rangeStart > 2) pages.push('...');
+    for (let i = rangeStart; i <= rangeEnd; i++) pages.push(i);
+    if (rangeEnd < last - 1) pages.push('...');
+    if (last > 1) pages.push(last);
+
+    return pages;
   }
 });

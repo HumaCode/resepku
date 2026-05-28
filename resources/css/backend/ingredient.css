@@ -324,6 +324,17 @@
   opacity: .4;
   cursor: not-allowed;
 }
+.pag-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--muted);
+  user-select: none;
+}
 
 /* ── Toolbar ── */
 .cat-toolbar {

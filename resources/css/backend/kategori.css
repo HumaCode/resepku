@@ -641,6 +641,17 @@
 .pag-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 .pag-btn:not(.active):not([disabled]):hover { border-color: var(--primary); color: var(--primary); }
 .pag-btn[disabled] { opacity: .4; cursor: not-allowed; }
+.pag-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--muted);
+  user-select: none;
+}
 
 /* Reset Button */
 .btn-reset {
