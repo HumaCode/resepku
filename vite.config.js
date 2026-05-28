@@ -23,6 +23,8 @@ export default defineConfig({
                 'resources/js/backend/tag.js',
                 'resources/css/backend/ingredient.css',
                 'resources/js/backend/ingredient.js',
+                'resources/css/backend/permission.css',
+                'resources/js/backend/permission.js',
             ],
             refresh: true,
         }),
