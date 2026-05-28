@@ -206,6 +206,8 @@ $(function() {
     const $btn = $(btn);
     $btn.prop('disabled', true);
 
+    PA.loading({ title: 'Sedang Proses', message: 'Mengubah status tag...' });
+
     $.ajax({
       url: `/tags/${id}/toggle-active`,
       method: 'PATCH',
@@ -214,6 +216,7 @@ $(function() {
       },
       dataType: 'json',
       success: function(response) {
+        PA.closeAll();
         if (response.success) {
           PA.toast({
             type: 'success',
@@ -226,6 +229,7 @@ $(function() {
         }
       },
       error: function() {
+        PA.closeAll();
         PA.toast({
           type: 'danger',
           title: 'Gagal',
