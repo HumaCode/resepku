@@ -2,7 +2,7 @@
      MODAL TAMBAH / EDIT TAG
      ══════════════════════════════════════ -->
 <div class="modal fade modal-cat" id="modalTambahTag" tabindex="-1" data-bs-backdrop="static">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 550px;">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title">

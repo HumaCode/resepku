@@ -760,3 +760,43 @@
   width: 30px;
   border-radius: 50%;
 }
+
+/* Component Styles Mapping */
+.form-label-m {
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: .4rem;
+  display: block;
+}
+.form-label-m .req {
+  color: var(--danger);
+  margin-left: 2px;
+}
+.form-input-m {
+  width: 100%;
+  padding: .68rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: .88rem;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color .25s, box-shadow .25s;
+  appearance: none;
+}
+.form-input-m:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(232,93,38,.1);
+  background: var(--surface);
+}
+.form-input-m::placeholder {
+  color: #bba898;
+}
+.form-hint-m {
+  font-size: .72rem;
+  color: var(--muted);
+  margin-top: .3rem;
+}
+
