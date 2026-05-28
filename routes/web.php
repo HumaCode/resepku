@@ -42,12 +42,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tags/{tag}', [\App\Http\Controllers\MasterData\TagController::class, 'destroy'])->name('tags.destroy');
 
     // Ingredients Routes
-    Route::get('/ingredients', [\App\Http\Controllers\MasterData\IngredientController::class, 'index'])->name('ingredients.index');
-    Route::get('/ingredients/list', [\App\Http\Controllers\MasterData\IngredientController::class, 'list'])->name('ingredients.list');
-    Route::post('/ingredients', [\App\Http\Controllers\MasterData\IngredientController::class, 'store'])->name('ingredients.store');
-    Route::put('/ingredients/{ingredient}', [\App\Http\Controllers\MasterData\IngredientController::class, 'update'])->name('ingredients.update');
-    Route::patch('/ingredients/{ingredient}/toggle-active', [\App\Http\Controllers\MasterData\IngredientController::class, 'toggleActive'])->name('ingredients.toggle-active');
-    Route::delete('/ingredients/{ingredient}', [\App\Http\Controllers\MasterData\IngredientController::class, 'destroy'])->name('ingredients.destroy');
+    Route::middleware('can:menu ingredients')->group(function () {
+        Route::get('/ingredients', [\App\Http\Controllers\MasterData\IngredientController::class, 'index'])->name('ingredients.index');
+        Route::get('/ingredients/list', [\App\Http\Controllers\MasterData\IngredientController::class, 'list'])->name('ingredients.list');
+        Route::post('/ingredients', [\App\Http\Controllers\MasterData\IngredientController::class, 'store'])->name('ingredients.store');
+        Route::put('/ingredients/{ingredient}', [\App\Http\Controllers\MasterData\IngredientController::class, 'update'])->name('ingredients.update');
+        Route::patch('/ingredients/{ingredient}/toggle-active', [\App\Http\Controllers\MasterData\IngredientController::class, 'toggleActive'])->name('ingredients.toggle-active');
+        Route::delete('/ingredients/{ingredient}', [\App\Http\Controllers\MasterData\IngredientController::class, 'destroy'])->name('ingredients.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';

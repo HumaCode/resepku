@@ -1,18 +1,37 @@
 <?php
 
 use App\Models\User;
+use App\Models\Permission;
 use App\Models\MasterData\Ingredient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    // Set up the required permission in the test database
+    Permission::create([
+        'name' => 'menu ingredients',
+        'guard_name' => 'web',
+        'is_active' => '1',
+    ]);
+});
 
 test('guest cannot access ingredients page', function () {
     $this->get(route('ingredients.index'))
         ->assertRedirect(route('login'));
 });
 
-test('authenticated user can view ingredients page', function () {
+test('user without permission cannot view ingredients page', function () {
     $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('ingredients.index'))
+        ->assertStatus(403);
+});
+
+test('authenticated user with permission can view ingredients page', function () {
+    $user = User::factory()->create();
+    $user->givePermissionTo('menu ingredients');
 
     $this->actingAs($user)
         ->get(route('ingredients.index'))
@@ -21,8 +40,9 @@ test('authenticated user can view ingredients page', function () {
         ->assertViewHasAll(['ingredients', 'statistics']);
 });
 
-test('authenticated user can fetch ingredients list via AJAX', function () {
+test('authenticated user with permission can fetch ingredients list via AJAX', function () {
     $user = User::factory()->create();
+    $user->givePermissionTo('menu ingredients');
 
     Ingredient::create([
         'emoji' => '🧅',
@@ -88,8 +108,23 @@ test('guest cannot store a new ingredient', function () {
     ])->assertStatus(401);
 });
 
-test('authenticated user can store a new ingredient with valid data', function () {
+test('user without permission cannot store a new ingredient', function () {
     $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->postJson(route('ingredients.store'), [
+            'emoji' => '🧅',
+            'name' => 'Bawang Merah',
+            'slug' => 'bawang-merah',
+            'category' => 'bumbu',
+            'default_unit' => 'siung',
+        ])
+        ->assertStatus(403);
+});
+
+test('authenticated user with permission can store a new ingredient with valid data', function () {
+    $user = User::factory()->create();
+    $user->givePermissionTo('menu ingredients');
 
     $response = $this->actingAs($user)
         ->postJson(route('ingredients.store'), [
@@ -123,8 +158,9 @@ test('authenticated user can store a new ingredient with valid data', function (
     ]);
 });
 
-test('authenticated user cannot store a new ingredient with duplicate slug', function () {
+test('authenticated user with permission cannot store a new ingredient with duplicate slug', function () {
     $user = User::factory()->create();
+    $user->givePermissionTo('menu ingredients');
 
     Ingredient::create([
         'emoji' => '🧅',
@@ -146,8 +182,9 @@ test('authenticated user cannot store a new ingredient with duplicate slug', fun
         ->assertJsonValidationErrors(['slug']);
 });
 
-test('authenticated user can update an existing ingredient', function () {
+test('authenticated user with permission can update an existing ingredient', function () {
     $user = User::factory()->create();
+    $user->givePermissionTo('menu ingredients');
 
     $ingredient = Ingredient::create([
         'emoji' => '🧅',
@@ -178,8 +215,9 @@ test('authenticated user can update an existing ingredient', function () {
     ]);
 });
 
-test('authenticated user can toggle ingredient active status', function () {
+test('authenticated user with permission can toggle ingredient active status', function () {
     $user = User::factory()->create();
+    $user->givePermissionTo('menu ingredients');
 
     $ingredient = Ingredient::create([
         'emoji' => '🧅',
@@ -213,8 +251,9 @@ test('authenticated user can toggle ingredient active status', function () {
     ]);
 });
 
-test('authenticated user can delete an ingredient', function () {
+test('authenticated user with permission can delete an ingredient', function () {
     $user = User::factory()->create();
+    $user->givePermissionTo('menu ingredients');
 
     $ingredient = Ingredient::create([
         'emoji' => '🧅',
