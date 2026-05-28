@@ -32,6 +32,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/categories/{category}', [\App\Http\Controllers\MasterData\CategoryController::class, 'update'])->name('categories.update');
     Route::patch('/categories/{category}/toggle-active', [\App\Http\Controllers\MasterData\CategoryController::class, 'toggleActive'])->name('categories.toggle-active');
     Route::delete('/categories/{category}', [\App\Http\Controllers\MasterData\CategoryController::class, 'destroy'])->name('categories.destroy');
+
+    // Tags Routes
+    Route::get('/tags', [\App\Http\Controllers\MasterData\TagController::class, 'index'])->name('tags.index');
+    Route::get('/tags/list', [\App\Http\Controllers\MasterData\TagController::class, 'getTags'])->name('tags.list');
+    Route::post('/tags', [\App\Http\Controllers\MasterData\TagController::class, 'store'])->name('tags.store');
+    Route::put('/tags/{tag}', [\App\Http\Controllers\MasterData\TagController::class, 'update'])->name('tags.update');
+    Route::patch('/tags/{tag}/toggle-active', [\App\Http\Controllers\MasterData\TagController::class, 'toggleActive'])->name('tags.toggle-active');
+    Route::delete('/tags/{tag}', [\App\Http\Controllers\MasterData\TagController::class, 'destroy'])->name('tags.destroy');
 });
 
 require __DIR__.'/auth.php';

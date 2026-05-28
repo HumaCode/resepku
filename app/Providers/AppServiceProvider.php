@@ -20,6 +20,11 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\MasterData\CategoryRepositoryInterface::class,
             \App\Repositories\MasterData\CategoryRepository::class
         );
+
+        $this->app->bind(
+            \App\Repositories\MasterData\TagRepositoryInterface::class,
+            \App\Repositories\MasterData\TagRepository::class
+        );
     }
 
     /**

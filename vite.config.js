@@ -19,6 +19,8 @@ export default defineConfig({
                 'resources/js/backend/role-permission.js',
                 'resources/css/backend/kategori.css',
                 'resources/js/backend/kategori.js',
+                'resources/css/backend/tag.css',
+                'resources/js/backend/tag.js',
             ],
             refresh: true,
         }),
