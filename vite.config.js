@@ -21,6 +21,8 @@ export default defineConfig({
                 'resources/js/backend/kategori.js',
                 'resources/css/backend/tag.css',
                 'resources/js/backend/tag.js',
+                'resources/css/backend/ingredient.css',
+                'resources/js/backend/ingredient.js',
             ],
             refresh: true,
         }),
