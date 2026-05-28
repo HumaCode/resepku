@@ -24,6 +24,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/roles-permissions-management/roles/{role}/toggle-active', [RolePermissionController::class, 'toggleActive'])->name('roles-permissions.toggle-active');
     Route::delete('/roles-permissions-management/roles/{role}', [RolePermissionController::class, 'destroy'])->name('roles-permissions.destroy');
     Route::post('/roles-permissions-management/permissions', [RolePermissionController::class, 'syncPermissions'])->name('roles-permissions.sync');
+
+    // Categories Routes
+    Route::get('/categories', [\App\Http\Controllers\MasterData\CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/list', [\App\Http\Controllers\MasterData\CategoryController::class, 'getCategories'])->name('categories.list');
+    Route::post('/categories', [\App\Http\Controllers\MasterData\CategoryController::class, 'store'])->name('categories.store');
+    Route::put('/categories/{category}', [\App\Http\Controllers\MasterData\CategoryController::class, 'update'])->name('categories.update');
+    Route::patch('/categories/{category}/toggle-active', [\App\Http\Controllers\MasterData\CategoryController::class, 'toggleActive'])->name('categories.toggle-active');
+    Route::delete('/categories/{category}', [\App\Http\Controllers\MasterData\CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 require __DIR__.'/auth.php';

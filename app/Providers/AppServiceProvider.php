@@ -15,6 +15,11 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Pengguna\RoleRepositoryInterface::class,
             \App\Repositories\Pengguna\RoleRepository::class
         );
+
+        $this->app->bind(
+            \App\Repositories\MasterData\CategoryRepositoryInterface::class,
+            \App\Repositories\MasterData\CategoryRepository::class
+        );
     }
 
     /**

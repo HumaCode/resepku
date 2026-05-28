@@ -17,6 +17,8 @@ export default defineConfig({
                 'resources/js/backend/global.js',
                 'resources/css/backend/role-permission.css',
                 'resources/js/backend/role-permission.js',
+                'resources/css/backend/kategori.css',
+                'resources/js/backend/kategori.js',
             ],
             refresh: true,
         }),
