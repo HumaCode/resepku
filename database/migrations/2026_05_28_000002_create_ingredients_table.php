@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('emoji', 10)->default('🥦');
-            $table->string('name');
+            $table->string('name')->index();
             $table->string('slug')->unique();
-            $table->string('category');
+            $table->string('category')->index();
             $table->string('default_unit');
             $table->text('description')->nullable();
-            $table->char('is_active', 1)->default('1');
-            $table->integer('views')->default(0);
+            $table->char('is_active', 1)->default('1')->index();
+            $table->integer('views')->default(0)->index();
             $table->timestamps();
         });
     }
