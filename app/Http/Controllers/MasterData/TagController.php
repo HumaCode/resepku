@@ -79,8 +79,8 @@ class TagController extends Controller
     {
         $validated = $request->validated();
         // Default values for boolean/checkbox fields if not sent
-        $validated['is_hot'] = $request->has('is_hot') ? '1' : '0';
-        $validated['is_active'] = $request->has('is_active') ? '1' : '0';
+        $validated['is_hot'] = $request->input('is_hot', '0') === '1' ? '1' : '0';
+        $validated['is_active'] = $request->input('is_active', '0') === '1' ? '1' : '0';
 
         $tag = $this->tagService->createTag($validated);
         $data = new TagResource($tag);
@@ -94,8 +94,8 @@ class TagController extends Controller
     public function update(UpdateTagRequest $request, Tag $tag): JsonResponse
     {
         $validated = $request->validated();
-        $validated['is_hot'] = $request->has('is_hot') ? '1' : '0';
-        $validated['is_active'] = $request->has('is_active') ? '1' : '0';
+        $validated['is_hot'] = $request->input('is_hot', '0') === '1' ? '1' : '0';
+        $validated['is_active'] = $request->input('is_active', '0') === '1' ? '1' : '0';
 
         $updatedTag = $this->tagService->updateTag($tag, $validated);
         $data = new TagResource($updatedTag);
