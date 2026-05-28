@@ -2,36 +2,22 @@
 
 namespace App\Models\MasterData;
 
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
+#[Fillable(['emoji', 'name', 'slug', 'category', 'default_unit', 'description', 'is_active', 'views'])]
 class Ingredient extends Model
 {
-    use HasFactory, HasUlids;
+    use HasUlids;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
+     * Scope a query to only include active ingredients.
      */
-    protected $table = 'ingredients';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'emoji',
-        'name',
-        'slug',
-        'category',
-        'default_unit',
-        'description',
-        'is_active',
-        'views',
-    ];
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', '1');
+    }
 
     /**
      * Scope a query to search ingredients by name or slug.
@@ -46,13 +32,5 @@ class Ingredient extends Model
             $q->where('name', 'like', "%{$keyword}%")
               ->orWhere('slug', 'like', "%{$keyword}%");
         });
-    }
-
-    /**
-     * Scope a query to only include active ingredients.
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', '1');
     }
 }
