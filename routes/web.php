@@ -18,6 +18,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::get('/roles-permissions-management', [RolePermissionController::class, 'index'])->name('roles-permissions.index');
+    Route::get('/recipes', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'index'])->name('recipes.index');
+    Route::get('/recipes/create', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'create'])->name('recipes.create');
+    Route::post('/recipes', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'store'])->name('recipes.store');
+    Route::get('/recipes/{recipe}/detail', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'show'])->name('recipes.show');
+    Route::get('/recipes/{recipe}/edit', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'edit'])->name('recipes.edit');
+    Route::put('/recipes/{recipe}', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'update'])->name('recipes.update');
+    Route::patch('/recipes/{recipe}/approve', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'approve'])->name('recipes.approve');
+    Route::patch('/recipes/{recipe}/toggle-status', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'toggleStatus'])->name('recipes.toggle-status');
+    Route::patch('/recipes/{recipe}/toggle-featured', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'toggleFeatured'])->name('recipes.toggle-featured');
+    Route::post('/recipes/{recipe}/duplicate', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'duplicate'])->name('recipes.duplicate');
+    Route::delete('/recipes/{recipe}', [\App\Http\Controllers\Konten\Resep\RecipeController::class, 'destroy'])->name('recipes.destroy');
     Route::get('/roles-permissions-management/roles', [RolePermissionController::class, 'getRoles'])->name('roles-permissions.roles');
     Route::post('/roles-permissions-management/roles', [RolePermissionController::class, 'store'])->name('roles-permissions.store');
     Route::put('/roles-permissions-management/roles/{role}', [RolePermissionController::class, 'update'])->name('roles-permissions.update');

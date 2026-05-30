@@ -1,0 +1,166 @@
+/* =========================================================
+   STYLE KHUSUS HALAMAN RESEP
+   ========================================================= */
+
+/* ── Toolbar ── */
+.resep-toolbar {
+  display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem; box-shadow: var(--shadow-sm);
+}
+.resep-search-wrap { position: relative; flex: 1; min-width: 200px; }
+.resep-search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .95rem; pointer-events: none; }
+.resep-search { width: 100%; padding: .6rem 1rem .6rem 2.5rem; border: 1.5px solid var(--border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: .88rem; background: var(--bg); color: var(--text); outline: none; transition: border-color .25s, box-shadow .25s; }
+.resep-search:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(232,93,38,.1); background: var(--surface); }
+.resep-search::placeholder { color: #bba898; }
+.resep-filter { padding: .6rem .9rem; border: 1.5px solid var(--border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: .85rem; background: var(--bg); color: var(--text); outline: none; cursor: pointer; transition: border-color .25s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath fill='%238a7060' d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 2rem; }
+.resep-filter:focus { border-color: var(--primary); }
+
+/* Tombol Tambah — link ke halaman create, bukan modal */
+.btn-tambah-resep {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .62rem 1.15rem; border: none; border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  color: #fff; font-family: 'DM Sans', sans-serif; font-size: .87rem;
+  font-weight: 600; cursor: pointer; white-space: nowrap; text-decoration: none;
+  box-shadow: 0 4px 14px rgba(232,93,38,.35);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-tambah-resep:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(232,93,38,.45); }
+.btn-tambah-resep i { font-size: 1rem; transition: transform .3s; }
+.btn-tambah-resep:hover i { transform: rotate(90deg); }
+
+/* ── Stat pills ── */
+.resep-stat-pills { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.stat-pill { display: inline-flex; align-items: center; gap: .45rem; padding: .45rem 1rem; border-radius: 50px; font-size: .8rem; font-weight: 600; border: 1.5px solid transparent; transition: transform .2s, box-shadow .2s; cursor: default; }
+.stat-pill:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+.stat-pill i { font-size: .9rem; }
+.pill-all       { background: var(--primary-pale); border-color: var(--primary-border); color: var(--primary); }
+.pill-published { background: rgba(34,197,94,.08); border-color: rgba(34,197,94,.2); color: #16a34a; }
+.pill-pending   { background: rgba(245,158,11,.08); border-color: rgba(245,158,11,.2); color: #d97706; }
+.pill-draft     { background: rgba(100,116,139,.08); border-color: rgba(100,116,139,.2); color: #475569; }
+.pill-rejected  { background: rgba(239,68,68,.07); border-color: rgba(239,68,68,.18); color: #dc2626; }
+
+/* ── Status badge resep ── */
+.resep-badge { font-size: .65rem; font-weight: 700; padding: .22rem .65rem; border-radius: 20px; white-space: nowrap; display: inline-block; }
+.badge-published { background: rgba(34,197,94,.12); color: #16a34a; border: 1px solid rgba(34,197,94,.25); }
+.badge-pending   { background: rgba(245,158,11,.1);  color: #d97706; border: 1px solid rgba(245,158,11,.25); }
+.badge-draft     { background: rgba(100,116,139,.1); color: #475569; border: 1px solid rgba(100,116,139,.22); }
+.badge-rejected  { background: rgba(239,68,68,.1);   color: #dc2626; border: 1px solid rgba(239,68,68,.2); }
+
+/* ── Featured badge ── */
+.badge-featured { background: rgba(245,200,66,.15); color: #b45309; border: 1px solid rgba(245,200,66,.4); font-size: .62rem; font-weight: 700; padding: .18rem .5rem; border-radius: 20px; white-space: nowrap; display: inline-block; }
+
+/* ── Thumbnail kecil di tabel ── */
+.resep-thumb {
+  width: 46px; height: 38px; border-radius: 8px;
+  object-fit: cover; background: var(--bg);
+  border: 1px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; overflow: hidden;
+}
+.resep-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 7px; }
+
+/* ── Rating bintang ── */
+.resep-rating { display: inline-flex; align-items: center; gap: .25rem; font-size: .78rem; font-weight: 600; color: var(--secondary); white-space: nowrap; }
+.resep-rating i { color: #f59e0b; font-size: .8rem; }
+
+/* ── Tabel resep ── */
+.resep-table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+}
+.resep-table-responsive {
+  width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.resep-table-responsive::-webkit-scrollbar { height: 4px; }
+.resep-table-responsive::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.resep-table {
+  width: 100%; min-width: 780px; border-collapse: collapse; font-size: .83rem;
+}
+.resep-table thead th {
+  background: var(--bg); color: var(--muted); font-weight: 600;
+  font-size: .7rem; text-transform: uppercase; letter-spacing: .5px;
+  padding: .8rem 1rem; border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.resep-table thead th.sortable { cursor: pointer; user-select: none; }
+.resep-table thead th.sortable:hover { color: var(--primary); }
+.resep-table thead th.sortable i { font-size: .65rem; margin-left: .2rem; opacity: .5; }
+.resep-table tbody td {
+  padding: .8rem 1rem; border-bottom: 1px solid rgba(237,229,220,.5);
+  vertical-align: middle; color: var(--text);
+}
+.resep-table tbody tr:last-child td { border-bottom: none; }
+.resep-table tbody tr { transition: background .15s; }
+.resep-table tbody tr:hover { background: var(--primary-pale); }
+
+/* Kolom judul — nama + kategori */
+.resep-table td.td-judul { min-width: 200px; }
+.resep-judul-text {
+  font-weight: 700; font-size: .88rem; color: var(--secondary);
+  display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+  margin-bottom: .2rem;
+}
+.resep-meta-text { font-size: .7rem; color: var(--muted); display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; }
+.resep-meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; flex-shrink: 0; }
+
+/* Penulis / kontributor */
+.resep-author { display: flex; align-items: center; gap: .5rem; white-space: nowrap; }
+.author-avatar { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--primary-light), var(--primary)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: .68rem; font-weight: 700; flex-shrink: 0; }
+.author-name { font-size: .78rem; font-weight: 500; color: var(--secondary); }
+
+/* Waktu masak + porsi */
+.resep-info-cell { white-space: nowrap; font-size: .78rem; color: var(--muted); }
+.resep-info-cell strong { color: var(--secondary); font-weight: 600; }
+
+/* Tombol aksi */
+.tbl-action-btn {
+  width: 30px; height: 30px; border-radius: 8px;
+  border: 1.5px solid var(--border); background: var(--surface);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .82rem; color: var(--muted); cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s, transform .2s;
+  text-decoration: none;
+}
+.tbl-action-btn:hover { transform: translateY(-1px); }
+.tbl-action-btn.view:hover   { background: rgba(59,130,246,.08); border-color: rgba(59,130,246,.2); color: #2563eb; }
+.tbl-action-btn.edit:hover   { background: var(--primary-pale); border-color: var(--primary-border); color: var(--primary); }
+.tbl-action-btn.del:hover    { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.2); color: var(--danger); }
+.tbl-action-btn.approve:hover { background: rgba(34,197,94,.08); border-color: rgba(34,197,94,.2); color: #16a34a; }
+
+/* ── Pagination ── */
+.resep-pagination {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .75rem; padding: .75rem 0;
+}
+.pag-info { font-size: .8rem; color: var(--muted); }
+.pag-info strong { color: var(--secondary); }
+.pag-btns { display: flex; gap: .35rem; }
+.pag-btn { width: 34px; height: 34px; border-radius: 9px; border: 1.5px solid var(--border); background: var(--surface); color: var(--muted); display: flex; align-items: center; justify-content: center; font-size: .82rem; font-weight: 600; cursor: pointer; transition: all .2s; }
+.pag-btn:hover { border-color: var(--primary); color: var(--primary); }
+.pag-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.pag-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── Modal delete ── */
+.modal-delete .modal-content { border-radius: 24px; border: none; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
+.modal-delete .modal-dialog { animation: bounceIn .4s cubic-bezier(.34,1.56,.64,1); }
+.delete-icon-wrap { width: 72px; height: 72px; border-radius: 20px; background: linear-gradient(135deg,#fee2e2,#fecaca); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; animation: iconBob 2s ease-in-out infinite; }
+.delete-icon-wrap i { font-size: 2rem; color: var(--danger); }
+.btn-modal-cancel { padding: .67rem 1.4rem; border-radius: 12px; border: 1.5px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: border-color .2s, color .2s; }
+.btn-modal-cancel:hover { border-color: var(--primary); color: var(--primary); }
+
+/* ── Responsive ── */
+@media (max-width: 575px) {
+  .resep-stat-pills { gap: .4rem; }
+  .stat-pill { font-size: .74rem; padding: .38rem .8rem; }
+  .resep-toolbar { gap: .5rem; }
+  .resep-pagination { flex-direction: column; align-items: center; }
+  .pag-info { text-align: center; width: 100%; }
+  .pag-btns { justify-content: center; }
+}
